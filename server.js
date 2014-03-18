@@ -36,9 +36,9 @@ app.use(function(req, res) {
 //	if (req.url.indexOf('/node_modules/') !== -1) {
 //		uri = 'src/features' + req.url.substr(req.url.indexOf('/node_modules/')+13, req.url.length);
 //	}
-//    if (req.url.indexOf('/build/debug/') !== -1) {
-//        uri = 'src/' + req.url.substr(req.url.indexOf('/build/debug/')+13, req.url.length);   
-//    }
+    if (req.url.indexOf('/build/debug/') !== -1) {
+        uri = 'src/' + req.url.substr(req.url.indexOf('/build/debug/')+13, req.url.length);   
+    }
     if (req.url.indexOf('/src/') !== -1) {
         uri = req.url.substr(req.url.indexOf('/src/'), req.url.length);   
     }
