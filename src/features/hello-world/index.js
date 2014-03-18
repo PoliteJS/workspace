@@ -7,6 +7,6 @@ exports.init = function() {
 
 exports.start = function() {
     console.log('Feature "hello world" has been started!');
-    dom.append('body', '<h1 class="jqbrick">jQbrick <small>Single Page App Builder</small></h1>');
-    dom.append('body', '<p class="jqbrick-hint">[open your browser console]</p>');
+    dom.append('body', require('./templates/title'));
+    dom.append('body', require('./templates/hint'));
 };

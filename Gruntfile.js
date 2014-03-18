@@ -40,9 +40,13 @@ module.exports = function (grunt) {
                 }
             },
             'build-features' : {
-                files: [
-                    {expand: true, cwd: 'src/features',src: ['**'], dest: 'build/debug/features'}
-                ],
+                files: [{
+                    expand: true, 
+                    cwd: 'src/features',
+                    src: ['**/*'], 
+                    dest: 'build/debug/features',
+                    rename: onCopyFeatureRename
+                }],
                 options: {
                     process: onCopyFeatureFile
                 }
@@ -182,7 +186,26 @@ module.exports = function (grunt) {
             grunt.config.data.browserify['build-features'].options.alias.push(alias);
         }
         
+        // transform template.html files into CommonJS modules
+        if (filePath.indexOf('.html') !== -1) {
+            var tmp = 'module.exports = [';
+            var rows = [];
+            content.split('\n').forEach(function(row) {
+                rows.push('unescape("' + escape(row) + '")');
+            });
+            content = tmp + rows.join(',') + '].join(\'\\n\');';
+        }
+        
         return content;
+    }
+    
+    // rename templates files into js
+    function onCopyFeatureRename(dest, src) {
+        if (src.indexOf('.html') !== -1) {
+            return dest + '/' + src.replace('.html', '.js');
+        } else {
+            return dest + '/' + src;
+        }
     }
     
     function onCopyIndexHtml(html) {
