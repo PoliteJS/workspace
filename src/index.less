@@ -1,0 +1,51 @@
+/**
+ * Project's Less Structure
+ * ========================
+ *
+ * The following comment (FEATURES) is a placeholder for `src/features` less
+ * source inclusion instructions which are automagically created by jQbrick/
+ *
+ * If you remove it then you are responsible of loading all LESS files for
+ * each feature.
+ */
+
+/*FEATURES*/
+
+@import url(http://fonts.googleapis.com/css?family=Exo+2:100);
+
+body {
+    width: 100%;
+    height: 100%;
+    padding-top:10%;
+    font-family: verdana;
+}
+
+.whiteHighlight() {
+    text-shadow: 0 1px 0 #fff;
+}
+
+h1.jqbrick {
+    .whiteHighlight;
+    text-align: center;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 50pt;
+    
+    small {
+        display:block;
+        letter-spacing: 2px;
+        color: #fafafa;
+        font-family: monospace;
+        text-shadow: -1px -1px 0 #888, 1px -1px 0 #888, 0 1px 0 #666, 0 2px 0 #666;
+        font-variant: small-caps;
+        text-transform: lowercase;
+        font-size: 40pt;
+    }
+}
+
+p.jqbrick-hint {
+    .whiteHighlight;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    margin: 0;
+}
