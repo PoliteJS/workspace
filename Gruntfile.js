@@ -16,25 +16,26 @@ module.exports = function (grunt) {
         
         clean: {
             build: ['build/debug/**/*'],
-            'build-tmp': [
-                'build/debug/modules',
-                'build/debug/features',
-                'build/debug/index.js',
-                'build/debug/index.less'
-            ],
+            'build-tmp': ['app'],
             release: ['build/release/**/*']
         },
         
         copy: {
             'build-static' : {
-                files: [
-                    {expand: true, cwd: 'src/assets',src: ['**'], dest: 'build/debug/assets'}
-                ]
+                files: [{
+                    expand: true, 
+                    cwd: 'src/assets',
+                    src: ['**'], 
+                    dest: 'build/debug/assets'
+                }]
             },
             'build-modules' : {
-                files: [
-                    {expand: true, cwd: 'src/modules',src: ['**'], dest: 'build/debug/modules'}
-                ],
+                files: [{
+                    expand: true, 
+                    cwd: 'src/modules',
+                    src: ['**'], 
+                    dest: 'app/modules'
+                }],
                 options: {
                     process: onCopyModuleFile
                 }
@@ -44,7 +45,7 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src/features',
                     src: ['**/*'], 
-                    dest: 'build/debug/features',
+                    dest: 'app/features',
                     rename: onCopyFeatureRename
                 }],
                 options: {
@@ -52,30 +53,49 @@ module.exports = function (grunt) {
                 }
             },
             'build-less-sources' : {
-                files: [
-                    {expand: true, cwd: 'src',src: ['**/*.less'], dest: 'build/debug'}
-                ]
+                files: [{
+                    expand: true, 
+                    cwd: 'src',
+                    src: ['**/*.less'],
+                    dest: 'app'
+                }]
             },
             'build-index-html' : {
-                files: [
-                    {expand: true, cwd: 'src',src: ['**/*.html'], dest: 'build/debug'}
-                ],
+                files: [{
+                    expand: true, 
+                    cwd: 'src',
+                    src: ['**/*.html'], 
+                    dest: 'build/debug',
+                    filter: function(filePath) {
+                        if (filePath.indexOf('/features/') !== -1) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }],
                 options: {
                     process: onCopyIndexHtml
                 }
             },
             'build-index-js' : {
-                files: [
-                    {expand: true, cwd: 'src',src: ['index.js'], dest: 'build/debug'}
-                ],
+                files: [{
+                    expand: true,
+                    cwd: 'src',
+                    src: ['index.js'], 
+                    dest: 'app'
+                }],
                 options: {
                     process: onCopyIndexJs
                 }
             },
             'build-index-less' : {
-                files: [
-                    {expand: true, cwd: 'src',src: ['index.less'], dest: 'build/debug/'}
-                ],
+                files: [{
+                    expand: true, 
+                    cwd: 'src',
+                    src: ['index.less'], 
+                    dest: 'app'
+                }],
                 options: {
                     process: onCopyIndexLess
                 }
@@ -85,7 +105,7 @@ module.exports = function (grunt) {
 		browserify: {
             'build-features': {
                 files: {
-                    'build/debug/assets/js/features.debug.js' : ['build/debug/index.js']
+                    'build/debug/assets/js/features.debug.js' : ['app/index.js']
                 },
                 options: {
                     debug: true,
@@ -97,7 +117,7 @@ module.exports = function (grunt) {
         less: {
 			build: {
 				files: {
-					'build/debug/assets/css/features.debug.css' : ['build/debug/index.less']
+					'build/debug/assets/css/features.debug.css' : ['app/index.less']
 				},
                 options: {
                     sourceMap: true,
@@ -166,7 +186,7 @@ module.exports = function (grunt) {
         var name = path.dirname(filePath).replace('src/modules/','').split('/').shift();
         
         // queque browserify module alias
-        var alias = 'build/debug/modules/' + name + '/index.js:' + name;
+        var alias = 'app/modules/' + name + '/index.js:' + name;
         if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
             grunt.config.data.browserify['build-features'].options.alias.push(alias);
         }
@@ -181,7 +201,7 @@ module.exports = function (grunt) {
         }
         
         // queque browserify module alias
-        var alias = 'build/debug/features/' + feature + '/index.js:' + feature;
+        var alias = 'app/features/' + feature + '/index.js:' + feature;
         if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
             grunt.config.data.browserify['build-features'].options.alias.push(alias);
         }
@@ -222,7 +242,7 @@ module.exports = function (grunt) {
     }
     
     function onCopyIndexLess(source) {
-        var lessBasePath = 'build/debug/features/**/index.less';
+        var lessBasePath = 'app/features/**/index.less';
         var replaceWith = '';
         features.forEach(function(feature) {
             var lessFeaturePath = lessBasePath.replace('**', feature);

@@ -33,14 +33,17 @@ app.use(express.static(PUBLIC_DIR));
 // fallback to features source files
 app.use(function(req, res) {
     var uri = '';
-//	if (req.url.indexOf('/node_modules/') !== -1) {
-//		uri = 'src/features' + req.url.substr(req.url.indexOf('/node_modules/')+13, req.url.length);
-//	}
+	if (req.url.indexOf('/node_modules/') !== -1) {
+		uri = 'src/features' + req.url.substr(req.url.indexOf('/node_modules/')+13, req.url.length);
+	}
     if (req.url.indexOf('/build/debug/') !== -1) {
         uri = 'src/' + req.url.substr(req.url.indexOf('/build/debug/')+13, req.url.length);   
     }
     if (req.url.indexOf('/src/') !== -1) {
         uri = req.url.substr(req.url.indexOf('/src/'), req.url.length);   
+    }
+    if (req.url.indexOf('/app/') !== -1) {
+        uri = req.url.substr(req.url.indexOf('/app/'), req.url.length);   
     }
     if (uri.length) {
         fs.readFile(path.join(ROOT_DIR, uri), 'utf8', function (err, data) {
