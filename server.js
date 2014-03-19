@@ -42,9 +42,6 @@ app.use(function(req, res) {
     if (req.url.indexOf('/src/') !== -1) {
         uri = req.url.substr(req.url.indexOf('/src/'), req.url.length);   
     }
-    if (req.url.indexOf('/app/') !== -1) {
-        uri = req.url.substr(req.url.indexOf('/app/'), req.url.length);   
-    }
     if (uri.length) {
         fs.readFile(path.join(ROOT_DIR, uri), 'utf8', function (err, data) {
 			if (!err) {

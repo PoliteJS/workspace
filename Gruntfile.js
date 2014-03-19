@@ -99,13 +99,46 @@ module.exports = function (grunt) {
                 options: {
                     process: onCopyIndexLess
                 }
+            },
+            'build-sourcemap-js' : {
+                files: [{
+                    expand: true, 
+                    cwd: 'app',
+                    src: ['features.debug.js'], 
+                    dest: 'build/debug/assets/js'
+                }],
+                options: {
+                    process: onCopyJsSourcemap
+                }
+            },
+            'build-sourcemap-less' : {
+                files: [{
+                    expand: true, 
+                    cwd: 'app',
+                    src: ['features.debug.css.map'], 
+                    dest: 'build/debug'
+                }],
+                options: {
+                    process: onCopyCssSourcemap
+                }
+            },
+            'build-less-css' : {
+                files: [{
+                    expand: true, 
+                    cwd: 'app',
+                    src: ['features.debug.css'], 
+                    dest: 'build/debug/assets/css'
+                }],
+                options: {
+                    process: onCopyLessCss
+                }
             }
         },
 		
 		browserify: {
             'build-features': {
                 files: {
-                    'build/debug/assets/js/features.debug.js' : ['app/index.js']
+                    'app/features.debug.js' : ['app/index.js']
                 },
                 options: {
                     debug: true,
@@ -117,12 +150,11 @@ module.exports = function (grunt) {
         less: {
 			build: {
 				files: {
-					'build/debug/assets/css/features.debug.css' : ['app/index.less']
+					'app/features.debug.css' : ['app/index.less']
 				},
                 options: {
                     sourceMap: true,
-                    sourceMapFilename: 'build/debug/assets/css/features.debug.css.map',
-                    sourceMapBasepath: 'build/debug/assets/css/'
+                    sourceMapFilename: 'app/features.debug.css.map'
                 },
 			}
 		},
@@ -164,6 +196,9 @@ module.exports = function (grunt) {
         'copy:build-index-less',
         'browserify:build-features',
         'less:build',
+        'copy:build-sourcemap-js',
+        'copy:build-sourcemap-less',
+        'copy:build-less-css',
         'clean:build-tmp'
     ]);
         
@@ -251,6 +286,29 @@ module.exports = function (grunt) {
             }
         });
         source = source.replace('/*FEATURES*/', replaceWith);
+        return source;
+    }
+    
+    function onCopyJsSourcemap(source) {
+        var b64Start = source.indexOf('//# sourceMappingURL=') + '//# sourceMappingURL=data:application/json;base64,'.length;
+        var b64Src = source.substr(b64Start, source.length);
+        var plain = new Buffer(b64Src, 'base64').toString('ascii');
+        
+        var re = new RegExp(__dirname, 'g');
+        plain = plain.replace(re, '');
+        plain = plain.replace(/\"\/app\//g, '"/src/');
+        
+        source = source.replace(b64Src, new Buffer(plain).toString('base64'));
+        return source;
+    }
+    
+    function onCopyCssSourcemap(source) {
+        source = source.replace(/\"app/g, '"/src');
+        return source;
+    }
+    
+    function onCopyLessCss(source) {
+        source = source.replace('sourceMappingURL=app/', 'sourceMappingURL=../../');
         return source;
     }
     
