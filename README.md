@@ -74,3 +74,13 @@ This should be useful for big packages to expose their modules to the global sco
 
 > To pollute the global scope should produce a really messy situation.  
 > **Do it very carefully!**
+
+## Use Images in LESS Sources
+
+When you write a _LESS_ source you may want to link some static image as backgrounds:
+
+    // map to src/assets folder
+    background: url(assets://img/file.jpg)
+    
+    // map to a featureName/assets folder
+    background: url(feature://img/file.jpg)

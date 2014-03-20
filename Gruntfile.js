@@ -58,7 +58,10 @@ module.exports = function (grunt) {
                     cwd: 'src',
                     src: ['**/*.less'],
                     dest: 'build/app'
-                }]
+                }],
+                options: {
+                    process: onCopyLessFile
+                }
             },
             'build-index-html' : {
                 files: [{
@@ -194,6 +197,7 @@ module.exports = function (grunt) {
         'copy:build-index-html',
         'copy:build-index-js',
         'copy:build-index-less',
+        'feature-assets',
         'browserify:build-features',
         'less:build',
         'copy:build-sourcemap-js',
@@ -276,6 +280,7 @@ module.exports = function (grunt) {
             }
         });
         source = source.replace('/*FEATURES*/', replaceWith);
+        source = source.replace(/assets:\/\//g, '../'); // support assets link
         return source;
     }
     
@@ -385,6 +390,39 @@ module.exports = function (grunt) {
         if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
             grunt.config.data.browserify['build-features'].options.alias.push(alias);
         }
+    }
+    
+    
+    /**
+     * Copy features assets folders:
+     * use `url(feature://file.jpg)` to refer to feature's assets 
+     * use `url(assets://img/file.jpg)` to refer to the workspace's assets
+     */
+    grunt.registerTask('feature-assets', 'copy features assets folder', function() {
+        require('async').each(features, function(item, callback) {
+            var source = process.cwd() + '/src/features/' + item + '/assets';
+            var dest = process.cwd() + '/build/debug/assets/' + item;
+            if (grunt.file.exists(source)) {
+                require('ncp').ncp(source, dest, callback);
+            } else {
+                callback();
+            }
+        }, this.async());
+    });
+    
+    function onCopyLessFile(content, path) {
+        var found = false;
+        features.forEach(function(feature) {
+            if (path.indexOf('/' + feature + '/') !== -1) {
+                content = content.replace(/feature:\/\//g, '../' + feature + '/');
+                content = content.replace(/assets:\/\//g, '../');
+                found = true;
+            }
+        });
+        if (found === false) {
+            content = content.replace(/assets:\/\//g, '../');
+        }
+        return content;
     }
     
 };

@@ -10,7 +10,9 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-less": "~0.10.0",
-    "grunt-browserify": "~2.0.0"
+    "grunt-browserify": "~2.0.0",
+    "ncp": "~0.5.0",
+    "async": "~0.2.10"
   },
   "keywords": [
     "single page application",
@@ -18,17 +20,17 @@
     "compiler",
     "builder"
   ],
-	"author": {
-		"name": "Marco Pegoraro",
-		"url": "http://movableapp.com"
-	},
+  "author": {
+    "name": "Marco Pegoraro",
+    "url": "http://movableapp.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/PoliteJS/workspace"
   },
-	"licenses": [
-		{
-			"type": "MIT"
-		}
-	]
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
 }
