@@ -1,5 +1,5 @@
 
-var dom = require('./dom');
+var dom = require('dom');
 
 exports.init = function() {
     console.log('Feature "hello world" has been initialized!');
