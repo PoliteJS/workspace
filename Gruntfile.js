@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         
         clean: {
             build: ['build/debug/**/*'],
-            'build-tmp': ['app'],
+            'build-tmp': ['build/app'],
             release: ['build/release/**/*']
         },
         
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src/modules',
                     src: ['**'], 
-                    dest: 'app/modules'
+                    dest: 'build/app/modules'
                 }],
                 options: {
                     process: onCopyModuleFile
@@ -45,7 +45,7 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src/features',
                     src: ['**/*'], 
-                    dest: 'app/features',
+                    dest: 'build/app/features',
                     rename: onCopyFeatureRename
                 }],
                 options: {
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src',
                     src: ['**/*.less'],
-                    dest: 'app'
+                    dest: 'build/app'
                 }]
             },
             'build-index-html' : {
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src',
                     src: ['index.js'], 
-                    dest: 'app'
+                    dest: 'build/app'
                 }],
                 options: {
                     process: onCopyIndexJs
@@ -94,7 +94,7 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src',
                     src: ['index.less'], 
-                    dest: 'app'
+                    dest: 'build/app'
                 }],
                 options: {
                     process: onCopyIndexLess
@@ -103,7 +103,7 @@ module.exports = function (grunt) {
             'build-sourcemap-js' : {
                 files: [{
                     expand: true, 
-                    cwd: 'app',
+                    cwd: 'build/app',
                     src: ['features.debug.js'], 
                     dest: 'build/debug/assets/js'
                 }],
@@ -114,7 +114,7 @@ module.exports = function (grunt) {
             'build-sourcemap-less' : {
                 files: [{
                     expand: true, 
-                    cwd: 'app',
+                    cwd: 'build/app',
                     src: ['features.debug.css.map'], 
                     dest: 'build/debug'
                 }],
@@ -125,7 +125,7 @@ module.exports = function (grunt) {
             'build-less-css' : {
                 files: [{
                     expand: true, 
-                    cwd: 'app',
+                    cwd: 'build/app',
                     src: ['features.debug.css'], 
                     dest: 'build/debug/assets/css'
                 }],
@@ -138,7 +138,7 @@ module.exports = function (grunt) {
 		browserify: {
             'build-features': {
                 files: {
-                    'app/features.debug.js' : ['app/index.js']
+                    'build/app/features.debug.js' : ['build/app/index.js']
                 },
                 options: {
                     debug: true,
@@ -150,11 +150,11 @@ module.exports = function (grunt) {
         less: {
 			build: {
 				files: {
-					'app/features.debug.css' : ['app/index.less']
+					'build/app/features.debug.css' : ['build/app/index.less']
 				},
                 options: {
                     sourceMap: true,
-                    sourceMapFilename: 'app/features.debug.css.map'
+                    sourceMapFilename: 'build/app/features.debug.css.map'
                 },
 			}
 		},
@@ -270,7 +270,7 @@ module.exports = function (grunt) {
     }
     
     function onCopyIndexLess(source) {
-        var lessBasePath = 'app/features/**/index.less';
+        var lessBasePath = 'build/app/features/**/index.less';
         var replaceWith = '';
         features.forEach(function(feature) {
             var lessFeaturePath = lessBasePath.replace('**', feature);
@@ -289,19 +289,19 @@ module.exports = function (grunt) {
         
         var re = new RegExp(__dirname, 'g');
         plain = plain.replace(re, '');
-        plain = plain.replace(/\"\/app\//g, '"/src/');
+        plain = plain.replace(/\"\/build\/app\//g, '"/src/');
         
         source = source.replace(b64Src, new Buffer(plain).toString('base64'));
         return source;
     }
     
     function onCopyCssSourcemap(source) {
-        source = source.replace(/\"app/g, '"/src');
+        source = source.replace(/\"build\/app/g, '"/src');
         return source;
     }
     
     function onCopyLessCss(source) {
-        source = source.replace('sourceMappingURL=app/', 'sourceMappingURL=../../');
+        source = source.replace('sourceMappingURL=build/app/', 'sourceMappingURL=../../');
         return source;
     }
     
@@ -342,11 +342,11 @@ module.exports = function (grunt) {
                 } else {
                     scriptName = modulePath.substr(0, modulePath.lastIndexOf('.'));
                 }
-                browserifyAddAlias('app/' + type + '/' + modulePath+':'+scriptName);
+                browserifyAddAlias('build/app/' + type + '/' + modulePath+':'+scriptName);
             }
         // exports only the module name, all internal pieces are masked
         } else {
-            browserifyAddAlias('app/' + type + '/' + moduleName + '/index.js:' + moduleName);
+            browserifyAddAlias('build/app/' + type + '/' + moduleName + '/index.js:' + moduleName);
         }
     }
     
