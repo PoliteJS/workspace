@@ -217,15 +217,11 @@ module.exports = function (grunt) {
     var path = require('path');
     var features = [];
     
+    
+    
+    
     function onCopyModuleFile(content, filePath) {   
-        var name = path.dirname(filePath).replace('src/modules/','').split('/').shift();
-        
-        // queque browserify module alias
-        var alias = 'app/modules/' + name + '/index.js:' + name;
-        if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
-            grunt.config.data.browserify['build-features'].options.alias.push(alias);
-        }
-        
+        filePath2BrowserifyAlias(filePath, 'modules', 'FULL');
         return content;
     }
     
@@ -235,11 +231,8 @@ module.exports = function (grunt) {
             features.push(feature);
         }
         
-        // queque browserify module alias
-        var alias = 'app/features/' + feature + '/index.js:' + feature;
-        if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
-            grunt.config.data.browserify['build-features'].options.alias.push(alias);
-        }
+        // create browserify alias 
+        filePath2BrowserifyAlias(filePath, 'features','FULL');
         
         // transform template.html files into CommonJS modules
         if (filePath.indexOf('.html') !== -1) {
@@ -310,6 +303,57 @@ module.exports = function (grunt) {
     function onCopyLessCss(source) {
         source = source.replace('sourceMappingURL=app/', 'sourceMappingURL=../../');
         return source;
+    }
+    
+    /**
+     * Exports features/ and modules/ to browserify aliases so to be required
+     * by name like: `require('module-name')`
+     *
+     * mode=FULL:
+     * exports the module name and each included file as selfish module path:
+     * - require('module')
+     * - require('module/submodule')
+     *
+     * Whithout "full mode" active only the module's name is aliased.
+     * This is meant to be for production usage.
+     */
+    /**
+     * @TODO: should search for a "package.json::exports" key which contain a list of
+     * sub modules to export (or exports:true to export all)
+     * then will be up each module to set the exports level
+     */
+    function filePath2BrowserifyAlias(filePath, type, mode) {
+        
+        var moduleName = path.dirname(filePath).replace('src/' + type + '/','').split('/').shift();
+        
+        // exports all single sub items of a module
+        if (mode === 'FULL') {
+            
+            // support HTML templates
+            if (filePath.indexOf('.html') !== -1) {
+                filePath = filePath.replace('.html', '.js');
+            }
+            
+            var modulePath = filePath.replace('src/' + type + '/','');
+            if (modulePath.indexOf('.js') !== -1 ) {
+                var scriptName = modulePath.substr(modulePath.lastIndexOf('/')+1, modulePath.lastIndexOf('.')-modulePath.lastIndexOf('/')-1);
+                if (scriptName === 'index') {
+                    scriptName = modulePath.substr(0, modulePath.lastIndexOf('/'));
+                } else {
+                    scriptName = modulePath.substr(0, modulePath.lastIndexOf('.'));
+                }
+                browserifyAddAlias('app/' + type + '/' + modulePath+':'+scriptName);
+            }
+        // exports only the module name, all internal pieces are masked
+        } else {
+            browserifyAddAlias('app/' + type + '/' + moduleName + '/index.js:' + moduleName);
+        }
+    }
+    
+    function browserifyAddAlias(alias) {
+        if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
+            grunt.config.data.browserify['build-features'].options.alias.push(alias);
+        }
     }
     
 };
