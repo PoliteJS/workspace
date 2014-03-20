@@ -1,6 +1,3 @@
 {
-    "exports" : [
-        "append",
-        "prepend"
-    ]
+    "exports" : true
 }
