@@ -15,6 +15,25 @@ jQbrick - Single Page App Builder
 > for the latest readme and docs!
 
 
+## jQbrick Workspace
+
+_jQbrick_ is basically a _GruntJS_ setup which combine some existing tools to provide you
+with **a good project organization and code structure in order to improve productivity**.
+
+> _jQbrick_ take **heavy inspiration** from a framework used internally in
+> Mobenga AB, the company I work with. This project try to bring some good concept we use 
+> to the OpenSource world!  
+> **I really want to credit Mobenga AB and my colleagues Markus, Robert and Tomas!**
+
+
+
+### Features
+
+### Modules
+
+### node_modules
+
+
 
 ## Export SubModules
 
