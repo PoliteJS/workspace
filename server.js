@@ -1,5 +1,5 @@
 /**
- * jQbrick - Debug Server
+ * PoliteJS Workspace - Debug Server
  */
 var http = require('http');
 var path = require('path');
@@ -71,7 +71,7 @@ app.use(function (req, res) {
 // Start
 server.listen(PORT);
 console.log(' ');
-console.log('===================================');
+console.log('======= PoliteJS Workspace ========');
 console.log('Just open your Chrome and point to:');
 console.log('http://localhost:%s', PORT);
 console.log('===================================');

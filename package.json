@@ -1,7 +1,7 @@
 {
-  "name": "jqbrick",
+  "name": "politejs-workspace",
   "version": "0.0.0",
-  "description": "Single Page Application Builder",
+  "description": "Single Page Application Workspace",
   "main": "Gruntfile.js",
   "devDependencies": {
     "grunt": "~0.4.4",
@@ -13,9 +13,9 @@
     "grunt-browserify": "~2.0.0"
   },
   "keywords": [
-    "sap",
+    "single page application",
     "boilerplate",
-    "jqbrick",
+    "compiler",
     "builder"
   ],
 	"author": {
@@ -24,7 +24,7 @@
 	},
   "repository": {
     "type": "git",
-    "url": "https://github.com/jQbrick/jqbrick"
+    "url": "https://github.com/PoliteJS/workspace"
   },
 	"licenses": [
 		{

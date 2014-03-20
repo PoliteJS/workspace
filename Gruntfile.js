@@ -1,5 +1,5 @@
 /**
- * TestBrowserify
+ * PoliteJS Workspace
  */
 
 module.exports = function (grunt) {

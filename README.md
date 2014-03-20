@@ -1,5 +1,5 @@
-jQbrick - Single Page App Builder
-=================================
+PoliteJS's Single Page App Workspace
+====================================
 
     1. Install Dependencies
     > npm install
@@ -11,16 +11,16 @@ jQbrick - Single Page App Builder
     > node server.js
     
 > This is a very early release which works but lack in documentation.  
-> Please **[refer to the GitHub repository](https://github.com/jQbrick/jqbrick)** 
+> Please **[refer to the GitHub repository](https://github.com/PoliteJS/workspace)** 
 > for the latest readme and docs!
 
 
-## jQbrick Workspace
+## Workspace
 
-_jQbrick_ is basically a _GruntJS_ setup which combine some existing tools to provide you
+_Workspace_ is basically a _GruntJS_ setup which combine some existing tools to provide you
 with **a good project organization and code structure in order to improve productivity**.
 
-> _jQbrick_ take **heavy inspiration** from a framework used internally in
+> _Workspace_ take **heavy inspiration** from a framework used internally in
 > Mobenga AB, the company I work with. This project try to bring some good concept we use 
 > to the OpenSource world!  
 > **I really want to credit Mobenga AB and my colleagues Markus, Robert and Tomas!**
@@ -37,7 +37,7 @@ with **a good project organization and code structure in order to improve produc
 
 ## Export SubModules
 
-By default _jQbrick_ makes available each folder under `src/features` and `src/modules` as a 
+By default _Workspace_ makes available each folder under `src/features` and `src/modules` as a 
 _require_ module so you can run:
 
     require('module-name').exportedAPI
