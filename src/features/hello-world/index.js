@@ -7,6 +7,6 @@ exports.init = function() {
 
 exports.start = function() {
     console.log('Feature "hello world" has been started!');
-    dom.append('body', require('./templates/title'));
-    dom.append('body', require('./templates/hint'));
+    dom.prepend('body', require('./templates/title'));
+    dom.prepend('body', require('./templates/hint'));
 };
