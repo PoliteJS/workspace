@@ -217,11 +217,8 @@ module.exports = function (grunt) {
     var path = require('path');
     var features = [];
     
-    
-    
-    
     function onCopyModuleFile(content, filePath) {   
-        filePath2BrowserifyAlias(filePath, 'modules', 'FULL');
+        filePath2BrowserifyAlias(filePath, 'modules');
         return content;
     }
     
@@ -232,7 +229,7 @@ module.exports = function (grunt) {
         }
         
         // create browserify alias 
-        filePath2BrowserifyAlias(filePath, 'features','FULL');
+        filePath2BrowserifyAlias(filePath, 'features');
         
         // transform template.html files into CommonJS modules
         if (filePath.indexOf('.html') !== -1) {
@@ -307,27 +304,51 @@ module.exports = function (grunt) {
     
     /**
      * Exports features/ and modules/ to browserify aliases so to be required
-     * by name like: `require('module-name')`
+     * by name like: 
+     *      require('module-name')
+     * 
+     * You can expose more than the module name by editing a module/package.json
+     *      {
+     *           "exports" : ['submodule-name', 'submodule-name/sub-submodule-name'],
+     *           "globals" : ['submodule-name'],
+     *      }
      *
-     * mode=FULL:
-     * exports the module name and each included file as selfish module path:
-     * - require('module')
-     * - require('module/submodule')
+     * "exports" key let a submodule to be vailable as
+     *      require('module-name/submodule-name')`
+     * 
+     * "globals" key let a submodule to pollute the global module namespace:
+     * (this allow a module to act more like a package of modules)
+     *      require('submodule-name')`
      *
-     * Whithout "full mode" active only the module's name is aliased.
-     * This is meant to be for production usage.
      */
-    /**
-     * @TODO: should search for a "package.json::exports" key which contain a list of
-     * sub modules to export (or exports:true to export all)
-     * then will be up each module to set the exports level
-     */
-    function filePath2BrowserifyAlias(filePath, type, mode) {
+    function filePath2BrowserifyAlias(filePath, type) {
         
+        var mode = '';
         var moduleName = path.dirname(filePath).replace('src/' + type + '/','').split('/').shift();
         
+        // try to read module's package.json to search submodules to export
+        var pkgPath = 'src/' + type + '/' + moduleName + '/package.json';
+        if (grunt.file.exists(pkgPath)) {
+            var pkgObj = grunt.file.readJSON(pkgPath);
+            if (pkgObj.exports === true) {
+                mode = 'FULL';
+            } else if ((typeof pkgObj.exports === 'object' && typeof pkgObj.exports.push === 'function') || (typeof pkgObj.globals === 'object' && typeof pkgObj.globals.push === 'function')) {
+                mode = [moduleName];
+                if (pkgObj.exports) {
+                    pkgObj.exports.forEach(function(subModule) {
+                        mode.push(moduleName + '/' + subModule);
+                    });
+                }
+                if (pkgObj.globals) {
+                    pkgObj.globals.forEach(function(subModule) {
+                        mode.push(moduleName + '/' + subModule);
+                    });
+                }
+            }
+        }
+        
         // exports all single sub items of a module
-        if (mode === 'FULL') {
+        if (mode) {
             
             // support HTML templates
             if (filePath.indexOf('.html') !== -1) {
@@ -342,8 +363,18 @@ module.exports = function (grunt) {
                 } else {
                     scriptName = modulePath.substr(0, modulePath.lastIndexOf('.'));
                 }
-                browserifyAddAlias('build/app/' + type + '/' + modulePath+':'+scriptName);
+                // export alias, try also to export globals sub modules of a package
+                if (mode === 'FULL' || mode.indexOf(scriptName) !== -1) {
+                    var subName = scriptName.substring(moduleName.length+1, scriptName.length);
+                    if (pkgObj && pkgObj.globals && pkgObj.globals.indexOf(subName) !== -1) {
+                        browserifyAddAlias('build/app/' + type + '/' + modulePath+':'+subName);
+                    } else {
+                        browserifyAddAlias('build/app/' + type + '/' + modulePath+':'+scriptName);
+                    }
+                    
+                }
             }
+            
         // exports only the module name, all internal pieces are masked
         } else {
             browserifyAddAlias('build/app/' + type + '/' + moduleName + '/index.js:' + moduleName);

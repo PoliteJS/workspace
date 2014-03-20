@@ -1,5 +1,5 @@
 
-var dom = require('dom');
+var prepend = require('dom/prepend');
 
 exports.init = function() {
     console.log('Feature "hello world" has been initialized!');
@@ -7,6 +7,6 @@ exports.init = function() {
 
 exports.start = function() {
     console.log('Feature "hello world" has been started!');
-    dom.prepend('body', require('./templates/title'));
-    dom.prepend('body', require('./templates/hint'));
+    prepend('body', require('./templates/title'));
+    prepend('body', require('./templates/hint'));
 };
