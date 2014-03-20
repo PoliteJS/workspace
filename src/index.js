@@ -1,6 +1,6 @@
 /**
- * jQbrick - Single Page App Builder
- * =================================
+ * PoliteJS Worspace - Single Page App Builder
+ * ===========================================
  * 
  * 
  */
