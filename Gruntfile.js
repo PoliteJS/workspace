@@ -162,10 +162,39 @@ module.exports = function (grunt) {
 			}
 		},
         
+        karma: {
+            test: {
+                configFile: 'karma.conf.js',
+                options: {
+                    singleRun: true,
+                    browsers: [
+                        'PhantomJS'
+//                        'Chrome', 
+//                        'ChromeCanary', 
+//                        'Firefox', 
+//                        'Opera'
+                    ],
+                    files: []
+                }
+            },
+            ci: {
+                configFile: 'karma.conf.js',
+                options: {
+                    browsers: ['PhantomJS'],
+                    singleRun: false,
+                    files: []
+                }
+            }
+        },
+        
         watch: {
             build: {
                 files: ['Gruntfile.js', 'src/**/*'],
                 tasks: ['build']
+            },
+            ci: {
+                files: ['build/debug/**/*'],
+                tasks: ['debug-karma-scripts', 'karma:ci:run']
             }
         }
 		
@@ -181,6 +210,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-karma');
 
 
 
@@ -209,6 +239,25 @@ module.exports = function (grunt) {
     grunt.registerTask('develop', [
         'build',
         'watch:build'
+    ]);
+    
+    grunt.registerTask('test', [
+        'build',
+        'debug-karma-scripts',
+        'karma:test'
+    ]);
+    
+    grunt.registerTask('start-ci', [
+        'build',
+        'debug-karma-scripts',
+        'karma:ci:start'
+    ]);
+    
+    grunt.registerTask('ci', [
+        'build',
+        'debug-karma-scripts',
+        'karma:ci:run',
+        'watch:ci'
     ]);
 	
     grunt.registerTask('default', ['build']);
@@ -424,5 +473,27 @@ module.exports = function (grunt) {
         }
         return content;
     }
+    
+    
+    /**
+     * Karma Runner Utility
+     * it extract all linked javascript in `index.html` and run through Karma
+     */
+    grunt.registerTask('debug-karma-scripts', 'build the full js stack to run under karma', function() {
+        var source = grunt.file.read('build/debug/index.html');
+        
+        // extract scripts form index.html
+        var paths = [];
+		source.replace(/<script\s+src="([^"]*)"\s*><\/script>/g, function (match, href) {
+            if (href.indexOf('./') !== -1) {
+                paths.push(href.replace('./', 'build/debug/'));
+            }
+		});
+        
+        paths.push('src/features/**/specs/**/*.spec.js');
+        paths.push('src/modules/**/specs/**/*.spec.js');
+        grunt.config.data.karma.test.options.files = paths;
+        grunt.config.data.karma.ci.options.files = paths;
+    });
     
 };
