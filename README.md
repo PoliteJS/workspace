@@ -35,7 +35,7 @@ with **a good project organization and code structure in order to improve produc
 
 
 
-## Export SubModules
+## Exports SubModules
 
 By default _Workspace_ makes available each folder under `src/features` and `src/modules` as a 
 _require_ module so you can run:
@@ -84,3 +84,32 @@ When you write a _LESS_ source you may want to link some static image as backgro
     
     // map to a featureName/assets folder
     background: url(feature://img/file.jpg)
+    
+
+## Testing With Karma
+
+You can add specification tests to both `src/features` and `src/modules`:
+
+    // feature-name/specs/test.spec.js
+    describe('my Feature', function() {
+        it('should start', function() {
+            expect(
+                require('feature-name').start
+            ).to.be.a('function');
+        });
+    });
+
+Then you can run all your tests with the _Grunt_ task:
+
+    grunt test
+    
+You can also start a **Continuous Integration** enviroment to quickly run tests when a new
+build is made:
+
+    // terminal 1: start a Karma server instance
+    grunt start-ci
+    
+    // terminal 2: run tests after every build
+    grunt ci
+    
+
