@@ -144,7 +144,9 @@ module.exports = function (grunt) {
                     'build/app/features.debug.js' : ['build/app/index.js']
                 },
                 options: {
-                    debug: true,
+                    bundleOptions : {
+                        debug: true
+                    },
                     alias: []
                 }
             }
