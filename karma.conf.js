@@ -18,6 +18,8 @@ module.exports = function(config) {
     plugins: [
         'karma-mocha',
         'karma-chai',
+        'karma-sinon',
+        'karma-coverage',
         'karma-phantomjs-launcher',
         'karma-chrome-launcher',
         'karma-firefox-launcher',
