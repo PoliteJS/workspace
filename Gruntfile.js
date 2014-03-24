@@ -216,6 +216,20 @@ module.exports = function (grunt) {
                     spawn: false
                 }
             }
+        },
+        
+        'npm-install' : {
+            src: {
+                files: [{
+                    expand: true, 
+                    cwd: 'src/features',
+                    src: ['*/package.json'],
+                },{
+                    expand: true, 
+                    cwd: 'src/modules',
+                    src: ['*/package.json'],
+                }]
+            }
         }
 		
 	});
@@ -279,8 +293,9 @@ module.exports = function (grunt) {
         'karma:ci:run',
         'watch:ci'
     ]);
-	
-    grunt.registerTask('default', ['build']);
+    
+    grunt.registerTask('install', ['npm-install']);
+    grunt.registerTask('default', ['install','build']);
     
 	
 // ----------------------------- //
@@ -519,6 +534,23 @@ module.exports = function (grunt) {
         paths.push('src/modules/**/specs/**/*.spec.js');
         grunt.config.data.karma.test.options.files = paths;
         grunt.config.data.karma.ci.options.files = paths;
+    });
+    
+    
+    /**
+     * Install a sub-folder npm dependencies
+     */
+    var path = require('path');
+    var shell = require('shelljs');
+    grunt.registerMultiTask('npm-install', 'install NPM dependencies of /features and /modules', function() {
+        this.filesSrc.forEach(function(filePath) {
+            var pkg = grunt.file.readJSON(filePath);
+            if (pkg.dependencies) {
+                grunt.log.writeln('NPM INSTALL: ', path.dirname(filePath));
+                var folderPath = process.cwd() + '/' + path.dirname(filePath);
+                shell.exec('cd ' + folderPath + ' && npm install');
+            }
+        });
     });
     
 };
