@@ -204,11 +204,17 @@ module.exports = function (grunt) {
         watch: {
             build: {
                 files: ['Gruntfile.js', 'src/**/*'],
-                tasks: ['build']
+                tasks: ['build'],
+                options: {
+                    spawn: false
+                }
             },
             ci: {
                 files: ['build/debug/**/*'],
-                tasks: ['debug-karma-scripts', 'karma:ci:run']
+                tasks: ['debug-karma-scripts', 'karma:ci:run'],
+                options: {
+                    spawn: false
+                }
             }
         }
 		
