@@ -2,13 +2,13 @@ PoliteJS's Single Page App Workspace
 ====================================
 
     1. Install Dependencies
-    > npm install
+    > npm install && grunt
     
-    2. Build
-    > grunt
-    
-    3. Run Debug Server
+    2. Run Debug Server
     > node server.js
+    
+    3. Start Development Observer
+    > grunt develop
     
 > This is a very early release which works but lack in documentation.  
 > Please **[refer to the GitHub repository](https://github.com/PoliteJS/workspace)** 
