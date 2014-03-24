@@ -27,7 +27,9 @@
     "karma-opera-launcher": "~0.1.0",
     "karma-coverage": "~0.2.1",
     "sinon": "~1.9.0",
-    "karma-sinon": "~1.0.3"
+    "karma-sinon": "~1.0.3",
+    "karma-osx-reporter": "0.0.4",
+    "karma-growl-reporter": "~0.1.1"
   },
   "keywords": [
     "single page application",

@@ -7,11 +7,11 @@ describe('Feature "hello-world"', function() {
     it('should have a "start()" method', function() {
         expect(
             require('hello-world')
-        ).to.has.property('start');     
+        ).to.has.property('start');
     });
     it('"start()" should be callable', function() {
         expect(
             require('hello-world').start
-        ).to.be.a('function');     
+        ).to.be.a('function');
     });
 });

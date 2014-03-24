@@ -178,22 +178,25 @@ module.exports = function (grunt) {
                     ],
                     reporters: [
                         'progress',
-                        'coverage'
+                        'coverage',
+                        'osx'
                     ],
                     preprocessors: {}, // filled dinamically
                     coverageReporter: {
                         type: 'html',
                         dir: 'build/coverage/'
-                    },
-                    files: [] // filled dinamically
+                    }
                 }
             },
             ci: {
                 configFile: 'karma.conf.js',
                 options: {
-                    browsers: ['PhantomJS'],
                     singleRun: false,
-                    files: []
+                    browsers: ['PhantomJS'],
+                    reporters: [
+                        'progress',
+                        'osx'
+                    ]
                 }
             }
         },
