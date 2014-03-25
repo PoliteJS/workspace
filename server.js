@@ -25,6 +25,7 @@ app.use(express.cookieParser());
 app.use(function(req, res, next){
     req.connection.setTimeout(500);
 	res.setHeader('Last-Modified', (new Date()).toUTCString());
+	req.connection.setTimeout(500);
 	next();
 });
 
