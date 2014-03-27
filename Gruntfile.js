@@ -2,8 +2,13 @@
  * PoliteJS Workspace
  */
 
-module.exports = function (grunt) {
 
+
+module.exports = function (grunt) {
+    
+    var wks = require('./grunt-workspace');
+    wks.init(grunt);
+    
 	var pkg = grunt.file.readJSON('package.json');
 	
 // ----------------------------------------------------- //
@@ -14,23 +19,15 @@ module.exports = function (grunt) {
 
 		pkg: pkg,
         
-        clean: {
-            build: ['build/debug/**/*'],
-            'build-tmp': ['build/app'],
-            'release-before': ['build/release/**/*'],
-            'release-after': ['build/release/assets/lib', 'build/release/assets/less']
+        'wks-configure': {
+            options: {
+                foo: 'Foo',
+                faa: 'Faa'
+            }
         },
         
+        
         copy: {
-            'build-static' : {
-                files: [{
-                    expand: true, 
-                    cwd: 'src/assets',
-                    src: ['**'], 
-                    dest: 'build/debug/assets',
-                    filter: function(path) {return path.indexOf('.less') === -1;}
-                }]
-            },
             'build-modules' : {
                 files: [{
                     expand: true, 
@@ -334,6 +331,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-cleanempty');
+    
+    
 
 
 
@@ -342,8 +341,9 @@ module.exports = function (grunt) {
 // --------------------------------------------- //
 
 	grunt.registerTask('build', [
-        'clean:build',
-        'copy:build-static',
+        'wks-configure',
+        'clean:wkd-main',
+        'copy:wkd-assets',
         'copy:build-features',
         'copy:build-modules',
         'copy:build-less-sources',
@@ -358,12 +358,12 @@ module.exports = function (grunt) {
         'copy:build-sourcemap-js',
         'copy:build-sourcemap-less',
         'copy:build-less-css',
-        'clean:build-tmp'
+        'clean:wks-tmp'
     ]);
     
     grunt.registerTask('release', [
     	'build',
-        'clean:release-before',
+        'clean:wkr-before',
         'copy:release-static',
         'copy:build-features',
         'copy:build-modules',
@@ -380,8 +380,8 @@ module.exports = function (grunt) {
         'cssmin',
         'uglify',
         'release-clear-assets',
-        'clean:release-after',
-        'clean:build-tmp',
+        'clean:wkr-after',
+        'clean:wks-tmp',
         'cleanempty:release'
         
     ]);
@@ -411,7 +411,7 @@ module.exports = function (grunt) {
     ]);
     
     grunt.registerTask('install', ['npm-install']);
-    grunt.registerTask('default', ['install','build']);
+    grunt.registerTask('default', ['install','release']);
     
 	
 // ----------------------------- //

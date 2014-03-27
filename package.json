@@ -33,7 +33,8 @@
     "karma-osx-reporter": "0.0.4",
     "karma-growl-reporter": "~0.1.1",
     "shelljs": "~0.2.6",
-    "grunt-cleanempty": "~0.2.0"
+    "grunt-cleanempty": "~0.2.0",
+    "extend": "~1.2.1"
   },
   "keywords": [
     "single page application",
