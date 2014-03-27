@@ -1,19 +1,24 @@
-var WKS = require('../index');
+
 var extend = require('extend');
 
-module.exports = function(grunt) {
 
+// internal helpers
+var copyFilters = require('../lib/copy-filters');
+var copyCallbacks = require('../lib/copy-callbacks');
+
+
+module.exports = function(grunt) {
+    
     grunt.registerTask('wks-configure', 'PoliteJS Workspace Configure', function() {
         
         var options = this.options();
         
         configClean(grunt);
         configCopy(grunt);
+        configBrowserify(grunt);
+        configLess(grunt);
     
     });
-    
-    
-    
     
 };
 
@@ -41,9 +46,171 @@ function configCopy(grunt) {
                 cwd: 'src/assets',
                 src: ['**'], 
                 dest: 'build/debug/assets',
-                filter: WKS.filters.excludeLess
+                filter: copyFilters.excludeLess
             }]
+        },
+        'wkd-modules' : {
+            files: [{
+                expand: true, 
+                cwd: 'src/modules',
+                src: ['**'], 
+                dest: 'build/app/modules'
+            }],
+            options: {
+                process: copyCallbacks.onCopyModules
+            }
+        },
+        'wkd-features' : {
+            files: [{
+                expand: true, 
+                cwd: 'src/features',
+                src: ['**/*'], 
+                dest: 'build/app/features',
+                filter: copyFilters.testFilesOnly,
+                rename: copyCallbacks.onCopyFeaturesRename
+            }],
+            options: {
+                process: copyCallbacks.onCopyFeatures
+            }
+        },
+        'wkd-less-sources' : {
+            files: [{
+                expand: true, 
+                cwd: 'src',
+                src: ['**/*.less'],
+                dest: 'build/app'
+            }],
+            options: {
+                process: copyCallbacks.onCopyLessFiles
+            }
+        },
+        'wkd-index-html' : {
+            files: [{
+                expand: true, 
+                cwd: 'src',
+                src: ['**/*.html'], 
+                dest: 'build/debug',
+                filter: copyFilters.featureTemplates
+            }],
+            options: {
+                process: copyCallbacks.onCopyIndexHtml
+            }
+        },
+        'wkd-index-js' : {
+            files: [{
+                expand: true,
+                cwd: 'src',
+                src: ['index.js'], 
+                dest: 'build/app'
+            }],
+            options: {
+                process: copyCallbacks.onCopyIndexJs
+            }
+        },
+        'wkd-index-less' : {
+            files: [{
+                expand: true, 
+                cwd: 'src',
+                src: ['index.less'], 
+                dest: 'build/app'
+            }],
+            options: {
+                process: copyCallbacks.onCopyIndexLess
+            }
+        },
+        'wkd-feature-assets' : {
+            files: []
+        },
+        'wkd-feature-assets-scripts' : {
+            files: [],
+            options: {
+                process: copyCallbacks.onCopyFeatureAssetsScripts
+            }
+        },
+        'wkd-sourcemap-js' : {
+            files: [{
+                expand: true, 
+                cwd: 'build/app',
+                src: ['features.debug.js'], 
+                dest: 'build/debug/assets/js'
+            }],
+            options: {
+                process: copyCallbacks.onCopyJsSourcemap
+            }
+        },
+        'wkd-sourcemap-less' : {
+            files: [{
+                expand: true, 
+                cwd: 'build/app',
+                src: ['features.debug.css.map'], 
+                dest: 'build/debug'
+            }],
+            options: {
+                process: copyCallbacks.onCopyCssSourcemap
+            }
+        },
+        'wkd-less-css' : {
+            files: [{
+                expand: true, 
+                cwd: 'build/app',
+                src: ['features.debug.css'], 
+                dest: 'build/debug/assets/css'
+            }],
+            options: {
+                process: copyCallbacks.onCopyLessCss
+            }
         }
     }, grunt.config.data.copy);
 }
+
+function configBrowserify(grunt) {   
+    if (!grunt.config.data.browserify) {
+        grunt.config.data.browserify = {};
+    }
+    grunt.config.data.browserify = extend(true, {
+        wkd: {
+            files: {
+                'build/app/features.debug.js' : ['build/app/index.js']
+            },
+            options: {
+                bundleOptions : {
+                    debug: true
+                },
+                alias: []
+            }
+        },
+        wkr: {
+            files: {
+                'build/release/assets/js/features.js' : ['build/app/index.js']
+            },
+            options: {
+                alias: []
+            }
+        }
+    }, grunt.config.data.browserify);
+}
+
+function configLess(grunt) {   
+    if (!grunt.config.data.less) {
+        grunt.config.data.less = {};
+    }
+    grunt.config.data.less = extend(true, {
+        wkd: {
+            files: {
+                'build/app/features.debug.css' : ['build/app/index.less']
+            },
+            options: {
+                sourceMap: true,
+                sourceMapFilename: 'build/app/features.debug.css.map'
+            },
+        },
+        wkr: {
+            files: {
+                'build/release/assets/css/features.css' : ['build/app/index.less']
+            }
+        }
+    }, grunt.config.data.less);
+}
+
+
 
