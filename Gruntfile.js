@@ -17,7 +17,8 @@ module.exports = function (grunt) {
         clean: {
             build: ['build/debug/**/*'],
             'build-tmp': ['build/app'],
-            release: ['build/release/**/*']
+            'release-before': ['build/release/**/*'],
+            'release-after': ['build/release/assets/lib', 'build/release/assets/less']
         },
         
         copy: {
@@ -26,7 +27,8 @@ module.exports = function (grunt) {
                     expand: true, 
                     cwd: 'src/assets',
                     src: ['**'], 
-                    dest: 'build/debug/assets'
+                    dest: 'build/debug/assets',
+                    filter: function(path) {return path.indexOf('.less') === -1;}
                 }]
             },
             'build-modules' : {
@@ -50,6 +52,15 @@ module.exports = function (grunt) {
                 }],
                 options: {
                     process: onCopyFeatureFile
+                }
+            },
+            'build-features-assets' : {
+                files: [] // copiled dinamically
+            },
+            'build-features-assets-scripts' : {
+                files: [], // copiled dinamically
+                options: {
+	                process: onCopyFeatureAssetsScripts
                 }
             },
             'build-less-sources' : {
@@ -135,8 +146,50 @@ module.exports = function (grunt) {
                 options: {
                     process: onCopyLessCss
                 }
+            },
+            'release-static' : {
+                files: [{
+                    expand: true, 
+                    cwd: 'src/assets',
+                    src: ['**'], 
+                    dest: 'build/release/assets',
+                    filter: function(path) {return path.indexOf('.less') === -1;}
+                }]
+            },
+            'release-features-assets' : {
+                files: [] // copiled dinamically
+            },
+            'release-features-assets-scripts' : {
+                files: [], // copiled dinamically
+                options: {
+	                process: onCopyFeatureAssetsScriptsRelease
+                }
+            },
+            'release-index-html' : {
+                files: [{
+                    expand: true, 
+                    cwd: 'src',
+                    src: ['**/*.html'], 
+                    dest: 'build/release',
+                    filter: function(filePath) {
+                        if (filePath.indexOf('/features/') !== -1) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }],
+                options: {
+                    process: onCopyIndexHtmlRelease
+                }
             }
         },
+        
+        cleanempty: {
+        	release: {
+				src: ['build/release/**/*']
+			}
+		},
 		
 		browserify: {
             'build-features': {
@@ -147,6 +200,14 @@ module.exports = function (grunt) {
                     bundleOptions : {
                         debug: true
                     },
+                    alias: []
+                }
+            },
+            'release-features': {
+                files: {
+                    'build/release/assets/js/features.js' : ['build/app/index.js']
+                },
+                options: {
                     alias: []
                 }
             }
@@ -161,6 +222,11 @@ module.exports = function (grunt) {
                     sourceMap: true,
                     sourceMapFilename: 'build/app/features.debug.css.map'
                 },
+			},
+			release: {
+				files: {
+					'build/release/assets/css/features.css' : ['build/app/index.less']
+				}
 			}
 		},
         
@@ -230,7 +296,27 @@ module.exports = function (grunt) {
                     src: ['*/package.json'],
                 }]
             }
-        }
+        },
+        
+        cssmin: {
+	        css: {
+		        files: {}
+	        }
+        },
+        
+        uglify: {
+        	options: {
+        		mangle: false,
+	        	compress: false,
+                beautify: true
+        	},
+			lib: {
+				files: {}
+			},
+			js: {
+				files: {}
+			}
+		}
 		
 	});
 
@@ -243,8 +329,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-cleanempty');
 
 
 
@@ -261,13 +350,40 @@ module.exports = function (grunt) {
         'copy:build-index-html',
         'copy:build-index-js',
         'copy:build-index-less',
-        'feature-assets',
+        'build-prepare-feature-assets',
+        'copy:build-features-assets',
+        'copy:build-features-assets-scripts',
         'browserify:build-features',
         'less:build',
         'copy:build-sourcemap-js',
         'copy:build-sourcemap-less',
         'copy:build-less-css',
         'clean:build-tmp'
+    ]);
+    
+    grunt.registerTask('release', [
+    	'build',
+        'clean:release-before',
+        'copy:release-static',
+        'copy:build-features',
+        'copy:build-modules',
+        'copy:build-less-sources',
+        'copy:release-index-html',
+        'release-prepare-feature-assets',
+        'copy:release-features-assets',
+        'copy:release-features-assets-scripts',
+        'copy:build-index-js',
+        'copy:build-index-less',
+        'browserify:release-features',
+        'less:release',
+        'release-config-concat',
+        'cssmin',
+        'uglify',
+        'release-clear-assets',
+        'clean:release-after',
+        'clean:build-tmp',
+        'cleanempty:release'
+        
     ]);
         
     grunt.registerTask('develop', [
@@ -344,6 +460,12 @@ module.exports = function (grunt) {
     function onCopyIndexHtml(html) {
         html = html.replace('<!--[/CSS]-->', '<link rel="stylesheet" href="./assets/css/features.debug.css" /><!--[/CSS]-->');
         html = html.replace('<!--[/JS]-->', '<script src="./assets/js/features.debug.js"></script><!--[/JS]-->');
+        return html;
+    }
+    
+    function onCopyIndexHtmlRelease(html) {    	
+        html = html.replace('<!--[/CSS]-->', '<link rel="stylesheet" href="./assets/css/features.css" /><!--[/CSS]-->');
+        html = html.replace('<!--[/JS]-->', '<script src="./assets/js/features.js"></script><!--[/JS]-->');
         return html;
     }
     
@@ -474,7 +596,21 @@ module.exports = function (grunt) {
         if (grunt.config.data.browserify['build-features'].options.alias.indexOf(alias) === -1) {
             grunt.config.data.browserify['build-features'].options.alias.push(alias);
         }
+        if (grunt.config.data.browserify['release-features'].options.alias.indexOf(alias) === -1) {
+            grunt.config.data.browserify['release-features'].options.alias.push(alias);
+        }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     /**
@@ -482,17 +618,75 @@ module.exports = function (grunt) {
      * use `url(feature://file.jpg)` to refer to feature's assets 
      * use `url(assets://img/file.jpg)` to refer to the workspace's assets
      */
-    grunt.registerTask('feature-assets', 'copy features assets folder', function() {
-        require('async').each(features, function(item, callback) {
-            var source = process.cwd() + '/src/features/' + item + '/assets';
-            var dest = process.cwd() + '/build/debug/assets/' + item;
-            if (grunt.file.exists(source)) {
-                require('ncp').ncp(source, dest, callback);
-            } else {
-                callback();
-            }
-        }, this.async());
+    grunt.registerTask('build-prepare-feature-assets', 'copy features assets folder', function() {
+    	features.forEach(function(item) {
+	    	grunt.config.data.copy['build-features-assets'].files.push({
+				expand: true,
+				src: ['**'],
+				cwd: 'src/features/' + item + '/assets',
+				dest: 'build/debug/assets/' + item
+			});
+			grunt.config.data.copy['build-features-assets-scripts'].files.push({
+				expand: true,
+				src: ['**'],
+				cwd: 'src/features/' + item + '/assets',
+				dest: 'build/debug/assets/' + item,
+				filter: filterFeatureAssetsScripts
+			});
+    	});
     });
+    
+    grunt.registerTask('release-prepare-feature-assets', 'copy features assets folder', function() {
+    	features.forEach(function(item) {
+	    	grunt.config.data.copy['release-features-assets'].files.push({
+				expand: true,
+				src: ['**'],
+				cwd: 'src/features/' + item + '/assets',
+				dest: 'build/release/assets/' + item
+			});
+			grunt.config.data.copy['release-features-assets-scripts'].files.push({
+				expand: true,
+				src: ['**'],
+				cwd: 'src/features/' + item + '/assets',
+				dest: 'build/release/assets/' + item,
+				filter: filterFeatureAssetsScripts
+			});
+    	});
+    });
+    
+    function filterFeatureAssetsScripts(path) {
+	    if (path.indexOf('.css') !== -1 || path.indexOf('.js') !== -1) {
+		    return true;
+	    } else {
+		    return false;
+	    }
+    }
+    
+    function onCopyFeatureAssetsScripts(content, path) {
+    	content = content.replace(/feature:\/\//g, '../');
+    	content = content.replace(/assets:\/\//g, '../../');
+	    return content;
+    }
+    
+    function onCopyFeatureAssetsScriptsRelease(content, path) {
+    	var feature = path.split('/features/')[1].split('/')[0];
+    	content = content.replace(/feature:\/\//g, '../' + feature + '/');
+    	content = content.replace(/assets:\/\//g, '../');
+	    return content;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     function onCopyLessFile(content, path) {
         var found = false;
@@ -551,6 +745,50 @@ module.exports = function (grunt) {
                 shell.exec('cd ' + folderPath + ' && npm install');
             }
         });
+    });
+    
+    
+    var cssList = [];
+    var libList = [];
+    var jsList = [];
+    
+    grunt.registerTask('release-config-concat','', function() {
+	    var html = grunt.file.read('build/release/index.html');
+	    
+        html.replace(/<!--\[CSS\]-->((?:.|[\r\n])*)<!--\[\/CSS\]-->/g, function(match, content) {
+        	content.replace(/<link\s+rel="stylesheet"\s+href="([^"]*)"\s*\/>/g, function (match, href) {
+				cssList.push(href.replace('./','build/release/'));
+	        });
+	        grunt.config.data.cssmin.css.files['build/release/assets/css/app.min.css'] = cssList;
+        });
+        
+        html.replace(/<!--\[JS\]-->((?:.|[\r\n])*)<!--\[\/JS\]-->/g, function(match, content) {
+        	content.replace(/<script\s+src="([^"]*)"\s*><\/script>/g, function (match, href) {
+				jsList.push(href.replace('./','build/release/'));
+	        });
+	        grunt.config.data.uglify.js.files['build/release/assets/js/app.min.js'] = jsList;
+        });
+        
+        html.replace(/<!--\[LIB\]-->((?:.|[\r\n])*)<!--\[\/LIB\]-->/g, function(match, content) {
+        	content.replace(/<script\s+src="([^"]*)"\s*><\/script>/g, function (match, href) {
+				libList.push(href.replace('./','build/release/'));
+	        });
+	        grunt.config.data.uglify.lib.files['build/release/assets/js/lib.min.js'] = libList;
+        });
+	    
+	    // replace incusion blocks
+    	html = html.replace(/<!--\[CSS\]-->[\s\S]*?<!--\[\/CSS\]-->/g, '<link rel="stylesheet" href="./assets/css/app.min.css" />');
+    	html = html.replace(/<!--\[JS\]-->[\s\S]*?<!--\[\/JS\]-->/g, '<script src="./assets/js/app.min.js"></script>');
+    	html = html.replace(/<!--\[LIB\]-->[\s\S]*?<!--\[\/LIB\]-->/g, '<script src="./assets/js/lib.min.js"></script>');
+    	grunt.file.write('build/release/index.html', html);
+    });
+    
+    grunt.registerTask('release-clear-assets','', function() {
+	    cssList.forEach(grunt.file.delete);
+	    libList.forEach(grunt.file.delete);
+	    jsList.forEach(grunt.file.delete);
+	    grunt.file.delete('build/release/assets/css/features.debug.css');
+	    grunt.file.delete('build/release/assets/js/features.debug.js');
     });
     
 };
