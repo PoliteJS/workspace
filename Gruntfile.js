@@ -5,7 +5,7 @@
 module.exports = function (grunt) {
     
     // Initialize PoliteJS Workspace
-    var Workspace = require('./grunt-workspace');
+    var Workspace = require('./lib/workspace');
     Workspace.init(grunt);
 
 	grunt.initConfig({
@@ -13,7 +13,7 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
         
         // Configure PoliteJS Workspace
-        'politejs-workspace': {
+        'workspace': {
             options: {}
         } 
 		
