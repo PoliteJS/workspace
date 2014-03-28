@@ -9,7 +9,7 @@ var copyCallbacks = require('../lib/copy-callbacks');
 
 module.exports = function(grunt) {
     
-    grunt.registerTask('wks-configure', 'PoliteJS Workspace Configure', function() {
+    grunt.registerTask('politejs-workspace', 'PoliteJS Workspace Configure', function() {
         
         var options = this.options();
         

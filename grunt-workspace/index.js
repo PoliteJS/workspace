@@ -4,7 +4,9 @@ var tasks = [
     require('./tasks/wks-feature-assets'),
     require('./tasks/release'),
     require('./tasks/wks-npm-install'),
-    require('./tasks/wks-karma')
+    require('./tasks/wks-karma'),
+    require('./tasks/wks-develop'),
+    require('./register-grunt-commands')
 ];
 
 
