@@ -17,6 +17,9 @@ module.exports = function(grunt) {
         configCopy(grunt);
         configBrowserify(grunt);
         configLess(grunt);
+        configCssmin(grunt);
+        configUglify(grunt);
+        configCleanempty(grunt);
     
     });
     
@@ -46,6 +49,15 @@ function configCopy(grunt) {
                 cwd: 'src/assets',
                 src: ['**'], 
                 dest: 'build/debug/assets',
+                filter: copyFilters.excludeLess
+            }]
+        },
+        'wkr-assets' : {
+            files: [{
+                expand: true, 
+                cwd: 'src/assets',
+                src: ['**'], 
+                dest: 'build/release/assets',
                 filter: copyFilters.excludeLess
             }]
         },
@@ -96,6 +108,18 @@ function configCopy(grunt) {
                 process: copyCallbacks.onCopyIndexHtml
             }
         },
+        'wkr-index-html' : {
+            files: [{
+                expand: true, 
+                cwd: 'src',
+                src: ['**/*.html'], 
+                dest: 'build/release',
+                filter: copyFilters.featureTemplates
+            }],
+            options: {
+                process: copyCallbacks.onCopyIndexHtmlForRelease
+            }
+        },
         'wkd-index-js' : {
             files: [{
                 expand: true,
@@ -121,10 +145,19 @@ function configCopy(grunt) {
         'wkd-feature-assets' : {
             files: []
         },
+        'wkr-feature-assets' : {
+            files: []
+        },
         'wkd-feature-assets-scripts' : {
             files: [],
             options: {
                 process: copyCallbacks.onCopyFeatureAssetsScripts
+            }
+        },
+        'wkr-feature-assets-scripts' : {
+            files: [],
+            options: {
+                process: copyCallbacks.onCopyFeatureAssetsScriptsForRelease
             }
         },
         'wkd-sourcemap-js' : {
@@ -212,5 +245,43 @@ function configLess(grunt) {
     }, grunt.config.data.less);
 }
 
+function configCssmin(grunt) {
+    if (!grunt.config.data.cssmin) {
+        grunt.config.data.cssmin = {};
+    }
+    grunt.config.data.cssmin = extend(true, {
+        wkr: {
+            files: {}
+        }
+    }, grunt.config.data.cssmin);
+}
 
+function configUglify(grunt) {
+    if (!grunt.config.data.uglify) {
+        grunt.config.data.uglify = {};
+    }
+    grunt.config.data.uglify = extend(true, {
+        options: {
+            mangle: false,
+            compress: false,
+            beautify: true
+        },
+        'wkr-lib': {
+            files: {}
+        },
+        'wkr-js': {
+            files: {}
+        }
+    }, grunt.config.data.uglify);
+}
 
+function configCleanempty(grunt) {
+    if (!grunt.config.data.cleanempty) {
+        grunt.config.data.cleanempty = {};
+    }
+    grunt.config.data.cleanempty = extend(true, {
+        wkr: {
+            src: ['build/release/**/*']
+        }
+    }, grunt.config.data.cleanempty);
+}

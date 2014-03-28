@@ -1,7 +1,8 @@
 
 var tasks = [
     require('./tasks/wks-configure'),
-    require('./tasks/wks-feature-assets')
+    require('./tasks/wks-feature-assets'),
+    require('./tasks/release')
 ];
 
 

@@ -70,6 +70,12 @@ exports.onCopyIndexHtml = function(content) {
     return content;
 };
 
+exports.onCopyIndexHtmlForRelease = function(content) {
+    content = content.replace('<!--[/CSS]-->', '<link rel="stylesheet" href="./assets/css/features.css" /><!--[/CSS]-->');
+    content = content.replace('<!--[/JS]-->', '<script src="./assets/js/features.js"></script><!--[/JS]-->');
+    return content;
+};
+
 exports.onCopyIndexJs = function(content, filePath) {
     if (WKS.features.length) {
         content = content.replace('/*FEATURES*/', "require('" + WKS.features.join("'),require('") + "')");
@@ -97,6 +103,13 @@ exports.onCopyFeatureAssetsScripts = function(content, filePath) {
     return content;
 };
 
+exports.onCopyFeatureAssetsScriptsForRelease = function(content, filePath) {
+    var feature = filePath.split('/features/')[1].split('/')[0];
+    content = content.replace(/feature:\/\//g, '../' + feature + '/');
+    content = content.replace(/assets:\/\//g, '../');
+    return content;
+};
+
 exports.onCopyJsSourcemap = function(content, filePath) {
     var b64Start = content.indexOf('//# sourceMappingURL=') + '//# sourceMappingURL=data:application/json;base64,'.length;
     var b64Src = content.substr(b64Start, content.length);
@@ -119,3 +132,6 @@ exports.onCopyLessCss = function(content, filePath) {
     content = content.replace('sourceMappingURL=build/app/', 'sourceMappingURL=../../');
     return content;
 };
+
+
+
