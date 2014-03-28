@@ -34,12 +34,14 @@ module.exports = function (grunt) {
          */
         'workspace': {
 //            options: {
+//                minifyTemplates: false,
 //                release: {
 //                    uglify: {
 //                        beautify: true,
 //                        compress: false,
 //                        mangle: false
-//                    }
+//                    },
+//                    minifyHtml: false
 //                },
 //                karma: {
 //                    test: {
@@ -94,7 +96,7 @@ module.exports = function (grunt) {
         'copy:wkd-sourcemap-js',
         'copy:wkd-sourcemap-less',
         'copy:wkd-less-css',
-        'clean:wks-tmp'
+//        'clean:wks-tmp'
     ]);
     
     grunt.registerTask('release', [
