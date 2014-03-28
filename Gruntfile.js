@@ -27,45 +27,6 @@ module.exports = function (grunt) {
         },
         
         
-        
-        
-        karma: {
-            test: {
-                configFile: 'karma.conf.js',
-                options: {
-                    singleRun: true,
-                    browsers: [
-                        'PhantomJS'
-//                        'Chrome', 
-//                        'ChromeCanary', 
-//                        'Firefox', 
-//                        'Opera'
-                    ],
-                    reporters: [
-                        'progress',
-                        'coverage',
-                        'osx'
-                    ],
-                    preprocessors: {}, // filled dinamically
-                    coverageReporter: {
-                        type: 'html',
-                        dir: 'build/coverage/'
-                    }
-                }
-            },
-            ci: {
-                configFile: 'karma.conf.js',
-                options: {
-                    singleRun: false,
-                    browsers: ['PhantomJS'],
-                    reporters: [
-                        'progress',
-                        'osx'
-                    ]
-                }
-            }
-        },
-        
         watch: {
             build: {
                 files: ['Gruntfile.js', 'src/**/*'],
@@ -73,53 +34,9 @@ module.exports = function (grunt) {
                 options: {
                     spawn: false
                 }
-            },
-            ci: {
-                files: ['build/debug/**/*'],
-                tasks: ['debug-karma-scripts', 'karma:ci:run'],
-                options: {
-                    spawn: false
-                }
             }
         },
         
-        'npm-install' : {
-            src: {
-                files: [{
-                    expand: true, 
-                    cwd: 'src/features',
-                    src: ['*/package.json'],
-                },{
-                    expand: true, 
-                    cwd: 'src/modules',
-                    src: ['*/package.json'],
-                }]
-            }
-        },
-        
-        /*
-cssmin: {
-	        css: {
-		        files: {}
-	        }
-        },
-*/
-        
-        /*
-uglify: {
-        	options: {
-        		mangle: false,
-	        	compress: false,
-                beautify: true
-        	},
-			lib: {
-				files: {}
-			},
-			js: {
-				files: {}
-			}
-		}
-*/
 		
 	});
 
@@ -199,73 +116,33 @@ uglify: {
     
     grunt.registerTask('test', [
         'build',
-        'debug-karma-scripts',
-        'karma:test'
+        'wks-karma-config',
+        'wks-karma-build',
+        'karma:wks-test'
     ]);
     
     grunt.registerTask('start-ci', [
         'build',
-        'debug-karma-scripts',
-        'karma:ci:start'
+        'wks-karma-config',
+        'wks-karma-build',
+        'karma:wks-ci:start'
     ]);
     
     grunt.registerTask('ci', [
-        'build',
-        'debug-karma-scripts',
-        'karma:ci:run',
-        'watch:ci'
+    	'build',
+        'wks-karma-config',
+        'wks-karma-build',
+        'karma:wks-ci:run',
+		'watch:wks-ci'
     ]);
     
-    grunt.registerTask('install', ['npm-install']);
+    grunt.registerTask('install', [
+    	'wks-npm-install-config',
+		'wks-npm-install-run',
+    ]);
+    
     grunt.registerTask('default', ['install','release']);
-    
-	
-// ----------------------------- //
-// ---[[   H E L P E R S   ]]--- //	
-// ----------------------------- //
-	
-    
-    /**
-     * Karma Runner Utility
-     * it extract all linked javascript in `index.html` and run through Karma
-     */
-    grunt.registerTask('debug-karma-scripts', 'build the full js stack to run under karma', function() {
-        var source = grunt.file.read('build/debug/index.html');
         
-        // extract scripts form index.html
-        var paths = [];
-		source.replace(/<script\s+src="([^"]*)"\s*><\/script>/g, function (match, href) {
-            if (href.indexOf('./') !== -1) {
-                paths.push(href.replace('./', 'build/debug/'));
-            }
-		});
-        
-        // add code coverage preprocesso in test
-        paths.forEach(function(path) {
-            grunt.config.data.karma.test.options.preprocessors[path] = ['coverage'];
-        });
-        
-        paths.push('src/features/**/specs/**/*.spec.js');
-        paths.push('src/modules/**/specs/**/*.spec.js');
-        grunt.config.data.karma.test.options.files = paths;
-        grunt.config.data.karma.ci.options.files = paths;
-    });
     
-    
-    /**
-     * Install a sub-folder npm dependencies
-     */
-    var path = require('path');
-    var shell = require('shelljs');
-    grunt.registerMultiTask('npm-install', 'install NPM dependencies of /features and /modules', function() {
-        this.filesSrc.forEach(function(filePath) {
-            var pkg = grunt.file.readJSON(filePath);
-            if (pkg.dependencies) {
-                grunt.log.writeln('NPM INSTALL: ', path.dirname(filePath));
-                var folderPath = process.cwd() + '/' + path.dirname(filePath);
-                shell.exec('cd ' + folderPath + ' && npm install');
-            }
-        });
-    });
     
 };

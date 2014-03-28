@@ -2,7 +2,9 @@
 var tasks = [
     require('./tasks/wks-configure'),
     require('./tasks/wks-feature-assets'),
-    require('./tasks/release')
+    require('./tasks/release'),
+    require('./tasks/wks-npm-install'),
+    require('./tasks/wks-karma')
 ];
 
 
