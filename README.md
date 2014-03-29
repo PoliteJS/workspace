@@ -10,43 +10,89 @@ PoliteJS's Single Page App Workspace
     3. Start Development Observer
     > grunt develop
     
+    4. Release Your App
+    > grunt release
+    
 > This is a very early release which works but lack in documentation.  
-> Please **[refer to the GitHub repository](https://github.com/PoliteJS/workspace)** 
-> for the latest readme and docs!
+> We are working hard to reach a first stable version, please contribute!
 
 
 ## Workspace
 
-_Workspace_ is basically a _GruntJS_ setup which combine some existing tools to provide you
-with **a good project organization and code structure in order to improve productivity**.
+The _Workspace_ is basically a _GruntJS_ setup which combine a lot of nice existing tools to provide you with **a good project organization and code structure in order to increase productivity**.
 
-> _Workspace_ take **heavy inspiration** from a framework used internally in
-> Mobenga AB, the company I work with. This project try to bring some good concept we use 
-> to the OpenSource world!  
+> The _Workspace_ take **heavy inspiration** from a framework used internally in
+> Mobenga AB, the company I work with. 
+>
+> This repository wants to bring some good concept we use to the OpenSource world!  
 > **I really want to credit Mobenga AB and my colleagues Markus, Robert and Tomas!**
 
+### Folder Structure
 
+A typical _Workspace_ folder structure should be as follow:
+
+    package.json
+    Gruntfile.js
+    karma.conf.js
+    src/
+        index.html
+        index.js
+        index.less
+        assets/
+            img/
+            css/
+            js/
+        features/
+        modules/
+    build/
+        debug/
+        release/
+    lib/workspace/
 
 ### Features
 
+A _feature_ represent a piece of your application and should wrap some responsabilities or should implement a story from your backlog. 
+
+> It's up to you to understan how to use feature the most productive way!
+
+A feature should contain:
+
+- _Javascript_ logic
+- _LESS_ rules
+- _HTML_ templates
+- static assets
+
+
 ### Modules
+
+A _module_ is a fully reusable piece of _Javascript_. 
+
+It should implement a single function or a complex library and should be composed by a great amount of **little sub-modules** just the _NodeJS_ way.
 
 ### node_modules
 
+The _Workspace_ allow to distribute both _features_ and _modules_ as pure _NPM_ dependencies listed in the app's `package.json`.
 
+A feature or a module should also depend on other modules and should contain an internal `package.json` where to list such dependencies.
 
-## Exports SubModules
+    // install all features and modules dependencies
+    grunt install
+    
+The command above step into all the project's features and modules and install (via `npm install`) all the listed dependencies.
+
+### Sub Modules
 
 By default _Workspace_ makes available each folder under `src/features` and `src/modules` as a 
-_require_ module so you can run:
+_require_ module so you can run the following command from the _window_ namespace:
 
     require('module-name').exportedAPI
     
 You can also expose some sub-modules in order to run:
 
+    // module-name/sub-module.js
     require('module-name/sub-module').exportedAPI
     
-You should achieve this objective by editing a `package.json` file inside the module:
+You can export sub-modules by editing the module's `package.json` file:
 
     // module-name/package.json
     {
@@ -56,7 +102,7 @@ You should achieve this objective by editing a `package.json` file inside the mo
       ]
     }
     
-> **NOTE:** you use the `"exports" : true` shortcut to expose all sub-modules!
+> **NOTE:** use the `"exports" : true` shortcut to expose all sub-modules!
 
 You can also expose a sub-module to the global scope:
 
@@ -85,6 +131,22 @@ When you write a _LESS_ source you may want to link some static image as backgro
     // map to a featureName/assets folder
     background: url(feature://img/file.jpg)
     
+> both `feature://` and `assets//` works also for feature's static CSS, but you are 
+> encouraged to switch to _LESS_ to write your stylesheets.
+
+## JS: Debug Code Scope
+
+Often you need to write **debug code which you wish to be automatically removed** from the release version. 
+
+Well the _Workspace_ introduces the concept of **comment-to-code** which is basically _Javascript_ code within comments:
+
+    // next line will run everywhere:
+    console.log('everywhere');
+    
+    // next line will run only debug build:
+    /*D console.log('only for debugging eyes'); */
+
+> Comment's code is **evaluated in the debug build** but is stripped out at release time.
 
 ## Testing With Karma
 
@@ -112,4 +174,3 @@ build is made:
     // terminal 2: run tests after every build
     grunt ci
     
-
