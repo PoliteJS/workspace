@@ -42,6 +42,10 @@ module.exports = function (grunt) {
 //                        mangle: false
 //                    },
 //                    minifyHtml: false,
+//                    inline: {
+//                        css: false,
+//                        js: false
+//                    },
 //                    manifest: {
 //                        exclude: [
 //                            '/assets/readme.txt',    // exclude file path
@@ -128,7 +132,9 @@ module.exports = function (grunt) {
         'clean:wkr-after',
         'clean:wks-tmp',
         'cleanempty:wkr',
-        'wkr-cache-manifest'
+        'wkr-cache-manifest',
+        'wkr-inline-assets',
+        'wkr-minify-html'
     ]);
         
     grunt.registerTask('develop', [
