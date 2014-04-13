@@ -1,5 +1,18 @@
 /**
  * PoliteJS Workspace - Debug Server
+ *
+ * // run standard debug server on 8080
+ * node server.js
+ *
+ * // custom port
+ * node server.js 1234
+ *
+ * // serve release folder on 8080
+ * node server.js -r
+ *
+ * // serve release folder on custom port
+ * node server.js -r 1234
+ *
  */
 var http = require('http');
 var path = require('path');
@@ -10,11 +23,49 @@ var express = require('express');
 var app = express();
 var server = http.createServer(app);
 
+
+// dynamic settings for path and port
+var TARGET = null;
+var PORT = null;
+var RELEASE_MODE = false;
+
+if (process.argv[2]) {
+    if (process.argv[2] === '-r') {
+        TARGET = 'build/release';
+    } else if (parseInt(process.argv[2]) == process.argv[2]) {
+        PORT = process.argv[2];
+    } else {
+        TARGET = process.argv[2];
+    }
+}
+
+if (process.argv[3]) {
+    if (TARGET === null) {
+        TARGET = process.argv[3];
+    } else if (PORT === null && parseInt(process.argv[3]) == process.argv[3]) {
+        PORT = process.argv[3];
+    }
+}
+
+// default settings
+if (TARGET === null) {
+    TARGET = 'build/debug/';
+}
+if (PORT === null) {
+    PORT = '8080';
+}
+
+
 // Settings
-var PORT = process.argv[2] ? parseInt(process.argv[2], 10) : 8080;
-var TARGET = process.argv[3] || 'build/debug/';
 var ROOT_DIR = __dirname;
 var PUBLIC_DIR = path.join(ROOT_DIR, '' + TARGET);
+
+
+// RELEASE MODE FLAG
+if (TARGET.toLocaleLowerCase().indexOf('build/release') !== -1) {
+    RELEASE_MODE = true;
+}
+
 
 // Parsing
 app.use(express.bodyParser());
@@ -22,12 +73,14 @@ app.use(express.cookieParser());
 
 
 // prevent cache
-app.use(function(req, res, next){
-    req.connection.setTimeout(500);
-	res.setHeader('Last-Modified', (new Date()).toUTCString());
-	req.connection.setTimeout(500);
-	next();
-});
+if (!RELEASE_MODE) {
+    app.use(function(req, res, next){
+        req.connection.setTimeout(500);
+        res.setHeader('Last-Modified', (new Date()).toUTCString());
+        req.connection.setTimeout(500);
+        next();
+    });
+}
 
 // static files
 app.use(express.static(PUBLIC_DIR));
