@@ -86,7 +86,7 @@ if (!RELEASE_MODE) {
 app.use(express.static(PUBLIC_DIR));
 
 // fallback to features source files
-app.use(function(req, res) {
+app.use(function(req, res, next) {
     var uri = '';
 	if (req.url.indexOf('/node_modules/') !== -1) {
 		uri = 'src/features' + req.url.substr(req.url.indexOf('/node_modules/')+13, req.url.length);
@@ -107,6 +107,7 @@ app.use(function(req, res) {
 			}
 		});
     }
+    next();
 });
 
 // fallback to index.html
