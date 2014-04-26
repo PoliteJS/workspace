@@ -5,13 +5,10 @@ PoliteJS's Single Page App Workspace
     > npm install && grunt
     
     2. Run Debug Server
-    > node server.js
+    > grunt serve-debug
     
-    3. Start Development Observer
+    3. Start a Development session
     > grunt develop
-    
-    4. Release Your App
-    > grunt release
     
 > This is a very early release which works but lack in documentation.  
 > We are working hard to reach a first stable version, please contribute!
@@ -180,21 +177,33 @@ During development you may want to **run your _web app_ through a _web server_**
 
 The _Workspace_ comes with a simple _Express_ based server which can be user for both **debug** and **release** build:
 
-    node server.js
+    grunt serve-debug
    
 This default configuration run an _HTTP Server_ available at `http://localhost:8080` serving your `build/debug` folder.
 
 > It provides also a full _sourcemaps_ support in order to **debug your app to the 
 > source files** for both _Javascript_ and _LESS_ sources.
 
-If you want to change the port you can give your preference as param:
+You can configure a custom port in the `Gruntfile.js` config:
 
-    node server.js 1234
+    'wks-debug-server' : {
+      wkd : {
+        options: {
+          args: '1234'
+        }
+      }
+    }
     
 When you are ready to test your production ready release you can run the server in _release mode_ which means your `build/release` folder is served and no cache prevention are done:
 
-    node server.js -r
+    grunt serve-release
     
 You can specify your desider port also for the release mode:
 
-    node server.js -r 1234
+    'wks-debug-server' : {
+      wkr : {
+        options: {
+          args: '1234'
+        }
+      }
+    }
