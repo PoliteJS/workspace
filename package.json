@@ -1,6 +1,6 @@
 {
   "name": "politejs-workspace",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Single Page Application Workspace",
   "main": "Gruntfile.js",
   "keywords": [
