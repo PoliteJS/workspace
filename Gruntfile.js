@@ -13,7 +13,7 @@
 module.exports = function (grunt) {
     
     // Initialize PoliteJS Workspace
-    var Workspace = require('./lib/workspace');
+    var Workspace = require('grunt-workspace');
     Workspace.init(grunt);
 
     
