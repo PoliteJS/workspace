@@ -5,7 +5,7 @@ PoliteJS's Single Page App Workspace
     > npm install && grunt
     
     2. Run Debug Server
-    > grunt serve-debug
+    > grunt server
     
     3. Start a Development session
     > grunt develop
