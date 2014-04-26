@@ -150,13 +150,13 @@ module.exports = function (grunt) {
     ]);
     
     // start debug server in development mode
-    grunt.registerTask('serve-debug', [
+    grunt.registerTask('server', [
         'build',
         'wks-debug-server:wkd'
     ]);
     
     // start debug server in release mode
-    grunt.registerTask('serve-release', [
+    grunt.registerTask('server-release', [
         'release',
         'wks-debug-server:wkr'
     ]);

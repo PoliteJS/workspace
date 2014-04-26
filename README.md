@@ -177,7 +177,7 @@ During development you may want to **run your _web app_ through a _web server_**
 
 The _Workspace_ comes with a simple _Express_ based server which can be user for both **debug** and **release** build:
 
-    grunt serve-debug
+    grunt server
    
 This default configuration run an _HTTP Server_ available at `http://localhost:8080` serving your `build/debug` folder.
 
@@ -196,7 +196,7 @@ You can configure a custom port in the `Gruntfile.js` config:
     
 When you are ready to test your production ready release you can run the server in _release mode_ which means your `build/release` folder is served and no cache prevention are done:
 
-    grunt serve-release
+    grunt server-release
     
 You can specify your desider port also for the release mode:
 
