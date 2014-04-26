@@ -89,6 +89,12 @@ module.exports = function (grunt) {
      *
      */
     
+    grunt.registerTask('install', [
+        'workspace',
+    	'wks-npm-install-config',
+		'wks-npm-install-run',
+    ]);
+    
     grunt.registerTask('build', [
         'workspace',
         'clean:wkd-main',
@@ -143,6 +149,18 @@ module.exports = function (grunt) {
         'watch:wkd'
     ]);
     
+    // start debug server in development mode
+    grunt.registerTask('serve-debug', [
+        'build',
+        'wks-debug-server:wkd'
+    ]);
+    
+    // start debug server in release mode
+    grunt.registerTask('serve-release', [
+        'release',
+        'wks-debug-server:wkr'
+    ]);
+    
     grunt.registerTask('test', [
         'build',
         'wks-karma',
@@ -160,12 +178,6 @@ module.exports = function (grunt) {
         'wks-karma',
         'karma:wks-ci:run',
 		'watch:wks-ci'
-    ]);
-    
-    grunt.registerTask('install', [
-        'workspace',
-    	'wks-npm-install-config',
-		'wks-npm-install-run',
     ]);
     
     grunt.registerTask('default', ['install','release']);
