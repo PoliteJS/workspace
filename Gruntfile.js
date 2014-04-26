@@ -13,7 +13,7 @@
 module.exports = function (grunt) {
     
     // Initialize PoliteJS Workspace
-    var Workspace = require('./lib/workspace');
+    var Workspace = require('grunt-workspace');
     Workspace.init(grunt);
 
     
@@ -151,13 +151,13 @@ module.exports = function (grunt) {
     
     // start debug server in development mode
     grunt.registerTask('server', [
-        'build',
+        'workspace',
         'wks-debug-server:wkd'
     ]);
     
     // start debug server in release mode
     grunt.registerTask('server-release', [
-        'release',
+        'workspace',
         'wks-debug-server:wkr'
     ]);
     
