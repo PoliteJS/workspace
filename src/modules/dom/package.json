@@ -1,3 +1,15 @@
 {
-    "exports" : true
+  "exports": true,
+  "name": "dom",
+  "version": "0.0.1",
+  "description": "basic DOM manipulation utilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "domify": "^1.2.2"
+  }
 }

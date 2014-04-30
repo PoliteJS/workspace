@@ -26,7 +26,7 @@
     }
   ],
   "devDependencies": {
-    "grunt-workspace": "~0.1.2",
+    "grunt-workspace": "~0.1.3",
     "grunt": "~0.4.4",
     "grunt-contrib-watch": "~0.6.0",
     "grunt-contrib-copy": "~0.5.0",
