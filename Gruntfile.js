@@ -173,6 +173,12 @@ module.exports = function (grunt) {
         'karma:wks-ci:start'
     ]);
     
+    grunt.registerTask('run-ci', [
+        'workspace',
+        'wks-karma',
+        'karma:wks-ci:run'
+    ]);
+    
     grunt.registerTask('ci', [
     	'build',
         'wks-karma',

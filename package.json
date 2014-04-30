@@ -1,6 +1,6 @@
 {
   "name": "politejs-workspace",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Single Page Application Workspace",
   "main": "Gruntfile.js",
   "keywords": [
@@ -26,7 +26,7 @@
     }
   ],
   "devDependencies": {
-    "grunt-workspace": "~0.1.1",
+    "grunt-workspace": "~0.1.2",
     "grunt": "~0.4.4",
     "grunt-contrib-watch": "~0.6.0",
     "grunt-contrib-copy": "~0.5.0",
