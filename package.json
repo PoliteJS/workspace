@@ -1,6 +1,6 @@
 {
   "name": "politejs-workspace",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Single Page Application Workspace",
   "main": "Gruntfile.js",
   "keywords": [
@@ -26,32 +26,15 @@
     }
   ],
   "devDependencies": {
-    "grunt-workspace": "~0.1.3",
-    "grunt": "~0.4.4",
-    "grunt-contrib-watch": "~0.6.0",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-less": "~0.10.0",
-    "grunt-contrib-uglify": "~0.4.0",
-    "grunt-contrib-cssmin": "~0.9.0",
-    "grunt-browserify": "~2.0.1",
-    "grunt-cleanempty": "~0.2.0",
-    "grunt-karma": "~0.8.2",
-    "karma": "~0.12.1",
-    "karma-chrome-launcher": "~0.1.2",
-    "karma-jasmine": "~0.1.5",
-    "karma-mocha": "~0.1.3",
-    "karma-firefox-launcher": "~0.1.3",
-    "karma-safari-launcher": "~0.1.1",
-    "karma-phantomjs-launcher": "~0.1.2",
-    "karma-chai": "~0.1.0",
-    "karma-opera-launcher": "~0.1.0",
-    "karma-coverage": "~0.2.1",
-    "karma-sinon": "~1.0.3",
-    "karma-osx-reporter": "0.0.4",
-    "karma-growl-reporter": "~0.1.1",
-    "mocha": "~1.18.2",
-    "chai": "~1.9.1",
-    "sinon": "~1.9.0"
+    "grunt": "~0.4.x",
+    "grunt-workspace": "~0.2.x",
+    "grunt-contrib-watch": "~0.6.x",
+    "grunt-contrib-copy": "~0.5.x",
+    "grunt-contrib-clean": "~0.5.x",
+    "grunt-contrib-less": "~0.10.x",
+    "grunt-contrib-uglify": "~0.4.x",
+    "grunt-contrib-cssmin": "~0.9.x",
+    "grunt-browserify": "~2.0.x",
+    "grunt-cleanempty": "~0.2.x"
   }
 }

@@ -161,31 +161,6 @@ module.exports = function (grunt) {
         'wks-debug-server:wkr'
     ]);
     
-    grunt.registerTask('test', [
-        'build',
-        'wks-karma',
-        'karma:wks-test'
-    ]);
-    
-    grunt.registerTask('start-ci', [
-        'workspace',
-        'wks-karma',
-        'karma:wks-ci:start'
-    ]);
-    
-    grunt.registerTask('run-ci', [
-        'workspace',
-        'wks-karma',
-        'karma:wks-ci:run'
-    ]);
-    
-    grunt.registerTask('ci', [
-    	'build',
-        'wks-karma',
-        'karma:wks-ci:run',
-		'watch:wks-ci'
-    ]);
-    
     grunt.registerTask('default', ['install','release']);
     
     
@@ -203,7 +178,44 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-cleanempty');
+    
+
+    
+    
+// ----------------------------------------------------- //
+// ---[[   G R U N T   K A R M A   S U P P O R T   ]]--- //
+// ----------------------------------------------------- //
+    
+    if (grunt.file.exists('./node_modules/grunt-karma')) {
+        
+        grunt.loadNpmTasks('grunt-karma');
+        
+        grunt.registerTask('test', [
+            'build',
+            'wks-karma',
+            'karma:wks-test'
+        ]);
+
+        grunt.registerTask('start-ci', [
+            'workspace',
+            'wks-karma',
+            'karma:wks-ci:start'
+        ]);
+
+        grunt.registerTask('run-ci', [
+            'workspace',
+            'wks-karma',
+            'karma:wks-ci:run'
+        ]);
+
+        grunt.registerTask('ci', [
+            'build',
+            'wks-karma',
+            'karma:wks-ci:run',
+            'watch:wks-ci'
+        ]);
+        
+    }
     
 };
