@@ -49,7 +49,7 @@ You write you app source files in `src/` then the building process creates two r
 
 A first `debug/` build is filled with uncompressed files, source maps and other testing facilities.
 
-A `release/` build contains the **optimised and _ready to deploy_ app**, concatenation, minification, caching and assets inlining are applied just out of the box.
+A `release/` build contains the **optimized and _ready to deploy_ app**, concatenation, minification, caching and assets inlining are applied just out of the box.
 
 ### App's Entry Points
 
@@ -62,14 +62,14 @@ The _Workspace_ is used to create **HTML5 Single Page Applications** so you have
 Into the `index.html` file you will find some **placeholder comments** for both CSS and JS:
 
     <!--[CSS]-->
-    place you cursom style links here
+    place you custom style links here
     <!--[/CSS]-->
     
     <!--[JS]-->
     place your custom script links here
     <!--[/JS]-->
     
-> Those placeholders are used by the _Workspace_ building process to concatenate and optimise your source files!
+> Those placeholders are used by the _Workspace_ building process to concatenate and optimize your source files!
 
 In both `index.js` and `index.less` you will find the `/*FEATURES*/` **placeholder** which is used to automagically include all the features you will create within your application's assets.
 
@@ -77,9 +77,9 @@ In both `index.js` and `index.less` you will find the `/*FEATURES*/` **placehold
 
 ### Features
 
-**A _Feature_ represents a slice of your application** and should wrap some responsabilities or should implement a story from your backlog. 
+**A _Feature_ represents a slice of your application** and should wrap some responsibilities or should implement a story from your backlog. 
 
-> It's up to you to understan how to use features the most productive way!
+> It's up to you to understand how to use features the most productive way!
 
 A Feature can contain:
 
@@ -168,7 +168,7 @@ You can also expose a sub-module to the global scope:
 This should be useful for big packages to expose their modules to the global scope <small>(like a framework package)</small>.
 
 > **IMPORTANT!**  
-> To pollute the global scope should produce unpredictable oucomes.  
+> To pollute the global scope should produce unpredictable outcomes.  
 > **Do it very carefully!**
 
 ## Use assets in LESS Sources
@@ -215,7 +215,7 @@ Then you can run all your tests with the _Grunt_ task:
 
     grunt test
     
-You can also start a **Continuous Integration** enviroment to quickly run tests when a new
+You can also start a **Continuous Integration** environment to quickly run tests when a new
 build is made:
 
     // terminal 1: start a Karma server instance
@@ -251,7 +251,7 @@ When you are ready to test your production ready release you can run the server 
 
     grunt server-release
     
-You can specify your desider port also for the release mode:
+You can specify your desired port also for the release mode:
 
     'wks-debug-server' : {
       wkr : {
