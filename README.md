@@ -12,7 +12,7 @@ PoliteJS's Single Page App Workspace
     
 > This is a very early release which works but lack in documentation.  
 > We are working hard to reach a first stable version, please contribute!
-u
+
 
 ## Workspace
 
