@@ -66,67 +66,82 @@ Into the `index.html` file you will find some **placeholder comments** for both 
     <!--[/CSS]-->
     
     <!--[JS]-->
-    place your cusom script links here
+    place your custom script links here
     <!--[/JS]-->
     
 > Those placeholders are used by the _Workspace_ building process to concatenate and optimise your source files!
 
-In both `index.js` and `index.less` you will find the `/*FEATURES*/` **placeholder** which is used to automagically include all the features you will create within your application.
+In both `index.js` and `index.less` you will find the `/*FEATURES*/` **placeholder** which is used to automagically include all the features you will create within your application's assets.
 
 
 
-### src/features
+### Features
 
-A _feature_ represent a piece of your application and should wrap some responsabilities or should implement a story from your backlog. 
+**A _Feature_ represents a slice of your application** and should wrap some responsabilities or should implement a story from your backlog. 
 
-> It's up to you to understan how to use feature the most productive way!
+> It's up to you to understan how to use features the most productive way!
 
-A feature should contain:
+A Feature can contain:
 
 - _Javascript_ logic
 - _LESS_ rules
 - _HTML_ templates
 - static assets
+- unit tests
+- `package.json` dependency manifest
 
 
-### src/modules
+### Modules
 
-A _module_ is a fully reusable piece of _Javascript_. 
+A _Module_ is a fully reusable piece of _Javascript_.
 
-It should implement a single function or a complex library and should be composed by a great amount of **little sub-modules** just the _NodeJS_ way.
+It should implements a single function or a complex library and should be composed by a great amount of **little sub-modules** just like the _NodeJS_ way.
 
-### node_modules
+A Module can contain:
 
-The _Workspace_ allow to distribute both _features_ and _modules_ as pure _NPM_ dependencies listed in the app's `package.json`.
+- _Javascript_ logic
+- unit tests
+- `package.json` dependency manifest
+
+### NPM Dependencies
+
+The _Workspace_ allow to install, require and **use any compatible _NPM Modules_**. 
+
+Application folder and any _Features_ or _Modules_ should expose a `package.json` manifest in which to list some dependencies.
+
+> The building process tries to resolve all _Features_ and 
+> _Modules_ dependencies before to build the App!
 
 By instance you can easily use _jQuery_ by loading it from _NPM_:
-
+    
+    // from you project's root
     npm install jquery --save
     
-then require it from your javascript:
+then require it from your javascript entry point:
     
-    var jQuery = require('jquery');
+    // src/index.js
+    window.$ = require('jquery');
 
 A feature or a module should also depend on other modules and should contain an internal `package.json` where to list such dependencies.
 
-    // install all features and modules dependencies
+    // install/check all features and modules dependencies
     grunt install
     
 The command above step into all the project's features and modules and install (via `npm install`) all the listed dependencies.
 
 ### Sub Modules
 
-By default _Workspace_ makes available each folder under `src/features` and `src/modules` as a 
-_require_ module so you can run the following command from the _window_ namespace:
-
+By default _Workspace_ makes available each folder under `src/features` and `src/modules` as a _require compatible namespace_ so you can run the following command from the _window_ scope:
+    
+    // "src/modules/module-name" should be referred as:
     require('module-name').exportedAPI
     
 You can also expose some sub-modules in order to run:
 
-    // module-name/sub-module.js
+    // use "src/modules/module-name/sub-module.js" as:
     require('module-name/sub-module').exportedAPI
     
-You can export sub-modules by editing the module's `package.json` file:
+To make above code to work you need to export each sub-module declaring it in module's `package.json` file:
 
     // module-name/package.json
     {
@@ -136,7 +151,7 @@ You can export sub-modules by editing the module's `package.json` file:
       ]
     }
     
-> **NOTE:** use the `"exports" : true` shortcut to expose all sub-modules!
+> Use the `"exports" : true` shortcut to expose all sub-modules!
 
 You can also expose a sub-module to the global scope:
 
@@ -150,23 +165,24 @@ You can also expose a sub-module to the global scope:
     // somewhere around the code
     require('sub-module');
     
-This should be useful for big packages to expose their modules to the global scope (like a little framework).
+This should be useful for big packages to expose their modules to the global scope <small>(like a framework package)</small>.
 
-> To pollute the global scope should produce a really messy situation.  
+> **IMPORTANT!**  
+> To pollute the global scope should produce unpredictable oucomes.  
 > **Do it very carefully!**
 
-## Use Images in LESS Sources
+## Use assets in LESS Sources
 
-When you write a _LESS_ source you may want to link some static image as backgrounds:
+When you write a _LESS_ source file you may want to link some static images as backgrounds or to create some _FontFace_ rules:
 
-    // map to src/assets folder
+    // map to "src/assets" folder
     background: url(assets://img/file.jpg)
     
-    // map to a featureName/assets folder
+    // map to a "featureName/assets" folder
     background: url(feature://img/file.jpg)
     
-> both `feature://` and `assets//` works also for feature's static CSS, but you are 
-> encouraged to switch to _LESS_ to write your stylesheets.
+> Both `feature://` and `assets://` works also for feature's static CSS, 
+> but you are encouraged to switch to _LessCss_ to write your stylesheets.
 
 ## JS: Debug Code Scope
 
