@@ -26,48 +26,7 @@ module.exports = function (grunt) {
 // --------------------------------------- //
     
 	grunt.initConfig({
-
-		pkg: grunt.file.readJSON('package.json'),
-        
-        /**
-         * Workspace Configuration
-         */
-        'workspace': {
-//            options: {
-//                minifyTemplates: false,
-//                release: {
-//                    uglify: {
-//                        beautify: true,
-//                        compress: false,
-//                        mangle: false
-//                    },
-//                    minifyHtml: false,
-//                    inline: {
-//                        css: false,
-//                        js: false
-//                    },
-//                    manifest: {
-//                        filename: 'appcache',
-//                        exclude: [
-//                            '/assets/readme.txt',    // exclude file path
-//                            '/assets/css/images/**'  // exclude an entire folder
-//                        ]
-//                    }
-//                },
-//                karma: {
-//                    test: {
-//                        browsers: [
-//                            'PhantomJS',
-//                            'Chrome', 
-//                            'ChromeCanary', 
-//                            'Firefox', 
-//                            'Opera'
-//                        ]
-//                    }
-//                }
-//            }
-        }
-		
+		pkg: grunt.file.readJSON('package.json')
 	});
     
     

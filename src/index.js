@@ -17,6 +17,4 @@ window.require = require;
 /**
  * StartApp
  */
-window.startApp = function() {
-    require('hello-world').start();
-};
+require('hello-world').start();

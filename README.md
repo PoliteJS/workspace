@@ -7,7 +7,7 @@ PoliteJS's Single Page App Workspace
     2. Run Debug Server
     > grunt server
     
-    3. Start a Development session
+    3. Start a Development session (in a new terminal tab)
     > grunt develop
     
 > This is a very early release which works but lack in documentation.  
@@ -16,17 +16,17 @@ PoliteJS's Single Page App Workspace
 
 ## Workspace
 
-The _Workspace_ is basically a _GruntJS_ setup which combine a lot of nice existing tools to provide you with **a good project organization and code structure in order to increase productivity**.
+The _Workspace_ is a _GruntJS_ setup which combines a lot of nice existing tools to provide you with **a clever project organization and code structure in order to increase productivity**.
 
-> The _Workspace_ take **heavy inspiration** from a framework used internally in
-> Mobenga AB, the company I work with. 
+> The _Workspace_ takes **heavy inspiration** from a framework which 
+> is used internally in Mobenga AB, the company I work with. 
 >
-> This repository wants to bring some good concept we use to the OpenSource world!  
-> **I really want to credit Mobenga AB and my colleagues Markus, Robert and Tomas!**
+> This repository aim to bring some good concept we use to the OpenSource world!  
+> **I really want to credit Mobenga AB and my colleagues Markus, Robert and Tomas for the great job we do together!**
 
 ### Folder Structure
 
-A typical _Workspace_ folder structure should be as follow:
+A typical _Workspace_ folder structure should be:
 
     package.json
     Gruntfile.js
@@ -44,9 +44,38 @@ A typical _Workspace_ folder structure should be as follow:
     build/
         debug/
         release/
-    lib/workspace/
 
-### Features
+You write you app source files in `src/` then the building process creates two runnable versions of your app in `build/`. 
+
+A first `debug/` build is filled with uncompressed files, source maps and other testing facilities.
+
+A `release/` build contains the **optimised and _ready to deploy_ app**, concatenation, minification, caching and assets inlining are applied just out of the box.
+
+### App's Entry Points
+
+The _Workspace_ is used to create **HTML5 Single Page Applications** so you have 3 main entry points for your application:
+
+- index.html
+- index.js
+- index.less
+
+Into the `index.html` file you will find some **placeholder comments** for both CSS and JS:
+
+    <!--[CSS]-->
+    place you cursom style links here
+    <!--[/CSS]-->
+    
+    <!--[JS]-->
+    place your cusom script links here
+    <!--[/JS]-->
+    
+> Those placeholders are used by the _Workspace_ building process to concatenate and optimise your source files!
+
+In both `index.js` and `index.less` you will find the `/*FEATURES*/` **placeholder** which is used to automagically include all the features you will create within your application.
+
+
+
+### src/features
 
 A _feature_ represent a piece of your application and should wrap some responsabilities or should implement a story from your backlog. 
 
@@ -60,7 +89,7 @@ A feature should contain:
 - static assets
 
 
-### Modules
+### src/modules
 
 A _module_ is a fully reusable piece of _Javascript_. 
 
@@ -69,6 +98,14 @@ It should implement a single function or a complex library and should be compose
 ### node_modules
 
 The _Workspace_ allow to distribute both _features_ and _modules_ as pure _NPM_ dependencies listed in the app's `package.json`.
+
+By instance you can easily use _jQuery_ by loading it from _NPM_:
+
+    npm install jquery --save
+    
+then require it from your javascript:
+    
+    var jQuery = require('jquery');
 
 A feature or a module should also depend on other modules and should contain an internal `package.json` where to list such dependencies.
 
@@ -206,4 +243,45 @@ You can specify your desider port also for the release mode:
           args: '1234'
         }
       }
+    }
+    
+## Workspace Config Options
+    
+    /**
+     * Workspace Configuration
+     */
+    'workspace': {
+        options: {
+            minifyTemplates: false,
+            release: {
+                uglify: {
+                    beautify: true,
+                    compress: false,
+                    mangle: false
+                },
+                minifyHtml: false,
+                inline: {
+                    css: false,
+                    js: false
+                },
+                manifest: {
+                    filename: 'appcache',
+                    exclude: [
+                        '/assets/readme.txt',    // exclude file path
+                        '/assets/css/images/**'  // exclude an entire folder
+                    ]
+                }
+            },
+            karma: {
+                test: {
+                    browsers: [
+                        'PhantomJS',
+                        'Chrome', 
+                        'ChromeCanary', 
+                        'Firefox', 
+                        'Opera'
+                    ]
+                }
+            }
+        }
     }
