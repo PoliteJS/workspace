@@ -13,8 +13,3 @@ var features = [/*FEATURES*/];
  */
 window.require = require;
 
-
-/**
- * StartApp
- */
-require('hello-world').start();
