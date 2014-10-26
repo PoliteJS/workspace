@@ -7,9 +7,12 @@ code structure in order to **increase web development productivity**.
 
 > In order to run the follwing Quick Start scripts you need 
 > [NodeJS][node] and [NPM][npm] up and runnin on your computer.
+> You also need [GulpJS][gulp] installed globally.
 
-
-    // quick start:
+    // install Gulp (if you don't have it yet)
+    npm install -g gulp
+    
+    // quick project startup
     npm install && gulp
     
 ## Folder Structure
