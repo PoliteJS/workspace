@@ -17,8 +17,8 @@
  * start a TDD session, all tests are executed as soon a source file change
  * or a test file is update with new tests.
  *
- * gulp dev-tdd
- * it combines DEV and TDD
+ * gulp start
+ * compile, monitor and start debug server in background
  *
  */
 
@@ -36,7 +36,7 @@ var assetsPath = path.join(wks.getConfig('source.path'), wks.getConfig('source.a
 
 // Development API
 
-gulp.task('default', ['build'], function() {});
+gulp.task('default', ['show'], function() {});
 
 gulp.task('build', function(done) {
     sequence(
@@ -48,15 +48,7 @@ gulp.task('build', function(done) {
     );
 });
 
-gulp.task('build-specs', function(done) {
-    sequence(
-        'wkd-clean-specs',
-        'wkd-bundle-specs',
-        done
-    );
-});
-
-gulp.task('dev', ['build'], function() {
+gulp.task('watch', function() {
     gulp.watch([
         appPath + '/*.html'
     ], ['wkd-build-html']);
@@ -74,6 +66,30 @@ gulp.task('dev', ['build'], function() {
     ], ['wkd-build-css']);
 });
 
+gulp.task('dev', function(done) {
+    sequence(
+        'build',
+        'watch',
+        done
+    );
+});
+
+gulp.task('show', function(done) {
+    sequence(
+        'build',
+        'wks-server-show',
+        done
+    );
+});
+
+gulp.task('start', function(done) {
+    sequence(
+        'build',
+        'wks-start',
+        done
+    );
+});
+
 gulp.task('test', function() {
     karma.server.start({
         configFile: __dirname + '/karma.conf.js',
@@ -86,13 +102,6 @@ gulp.task('tdd', function (done) {
     karma.server.start({
         configFile: __dirname + '/karma.conf.js'
     }, done); 
-});
-
-gulp.task('dev-tdd', function() {
-    sequence(
-        'dev',
-        'test-session'
-    );
 });
 
 // Partials Tasks (do not use those tasks alone)
@@ -129,4 +138,5 @@ gulp.task('wkd-rebuild-html', function(done) {
         done
     );
 });
+
 

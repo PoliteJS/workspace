@@ -21,6 +21,7 @@ module.exports = function(config) {
         // test results reporter to use
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: [
+            'progress',
             'coverage', 
             'osx'
         ],

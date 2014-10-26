@@ -10,4 +10,4 @@
  */
 
 require('x-app');
-ko.applyBindings({});
+ko.applyBindings();

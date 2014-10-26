@@ -31,7 +31,7 @@
   "devDependencies": {
     "chai": "^1.9.2",
     "gulp": "^3.8.9",
-    "gulp-workspace": "0.0.5",
+    "gulp-workspace": "0.0.x",
     "istanbul": "^0.3.2",
     "istanbul-instrumenter-loader": "^0.1.2",
     "karma": "^0.12.24",
@@ -49,5 +49,7 @@
     "webpack": "^1.4.8",
     "webpack-dev-server": "^1.6.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jqb-ko-component": "0.0.0"
+  }
 }
