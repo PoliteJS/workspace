@@ -141,7 +141,15 @@ key in which you list the sub-modules folder structure you need:
 
 ## Unit Tests & TDD
 
-Every app module can host a `module-name/specs` folder in which to put one or more
+> **KarmaJS test suite is not installed by default!**
+
+    // install KarmaJS test suite
+    
+    gulp init-tdd
+    
+
+
+Every app's module can host a `module-name/specs` folder in which to put one or more
 **unit tests** specification files.
 
     /module-name
@@ -152,6 +160,21 @@ Every app module can host a `module-name/specs` folder in which to put one or mo
           foo.spec.js
           
 Tests are run with KarmaJS and MochaJS, ChaiJS and SinonJS are available to tests code.
+
+    /**
+     * Demo Unit Test
+     */
+    
+    var moduleToTest = require('module-to-test');
+    
+    describe('module-to-test', function() {
+    
+        it('should do the math', function() {
+            var result = moduleToTest.sum(1, 3);
+            expect(result).to.equal(4);
+        });
+        
+    });
 
 ### `gulp test`
 

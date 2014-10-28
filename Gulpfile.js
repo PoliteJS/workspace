@@ -13,6 +13,10 @@
  * start a development session which keep the target folder up to date
  * by monitoring source changes and rebuilding the project in background
  *
+ * gulp init-tdd
+ * install KarmaJS test suite 
+ * you need to do this once before to start unit testing
+ *
  * gulp tdd
  * start a TDD session, all tests are executed as soon a source file change
  * or a test file is update with new tests.
@@ -22,9 +26,9 @@
  *
  */
 
-var gulp = require('gulp');
-var karma = require('karma');
+var fs = require('fs');
 var path = require('path');
+var gulp = require('gulp');
 var sequence = require('run-sequence');
 
 // Setup Workspace
@@ -90,19 +94,30 @@ gulp.task('start', function(done) {
     );
 });
 
-gulp.task('test', function() {
-    karma.server.start({
-        configFile: __dirname + '/karma.conf.js',
-        singleRun: true,
-        autoWatch: false
-    });
+// Tests tasks are available only "on demand"
+
+gulp.task('init-tdd', function(done) {
+    sequence(
+        'wks-install-karma',
+        done
+    );
 });
 
-gulp.task('tdd', function (done) {
-    karma.server.start({
-        configFile: __dirname + '/karma.conf.js'
-    }, done); 
-});
+if (fs.existsSync(path.join(__dirname, 'node_modules/karma'))) {
+    var karma = require('karma');
+    gulp.task('test', function() {
+        karma.server.start({
+            configFile: __dirname + '/karma.conf.js',
+            singleRun: true,
+            autoWatch: false
+        });
+    });
+    gulp.task('tdd', function (done) {
+        karma.server.start({
+            configFile: __dirname + '/karma.conf.js'
+        }, done); 
+    });
+}
 
 // Partials Tasks (do not use those tasks alone)
 

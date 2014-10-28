@@ -1,6 +1,6 @@
 {
   "name": "politejs-workspace",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Single Page Application Workspace",
   "main": "Gulpfile.js",
   "scripts": {
@@ -29,25 +29,10 @@
     }
   ],
   "devDependencies": {
-    "chai": "^1.9.2",
     "gulp": "^3.8.9",
     "gulp-workspace": "0.0.x",
-    "istanbul": "^0.3.2",
-    "istanbul-instrumenter-loader": "^0.1.2",
-    "karma": "^0.12.24",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^0.2.6",
-    "karma-mocha": "^0.1.9",
-    "karma-osx-reporter": "^0.1.0",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-sinon": "^1.0.3",
-    "karma-webpack": "^1.3.1",
-    "mocha": "^2.0.1",
     "raw-loader": "^0.5.1",
-    "run-sequence": "^1.0.1",
-    "sinon": "^1.10.3",
-    "webpack": "^1.4.8",
-    "webpack-dev-server": "^1.6.5"
+    "run-sequence": "^1.0.1"
   },
   "dependencies": {
     "jqb-ko-component": "0.0.0"
