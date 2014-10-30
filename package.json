@@ -1,6 +1,6 @@
 {
   "name": "politejs-workspace",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Single Page Application Workspace",
   "main": "Gulpfile.js",
   "scripts": {
@@ -31,7 +31,6 @@
   "devDependencies": {
     "gulp": "^3.8.9",
     "gulp-workspace": "0.0.x",
-    "raw-loader": "^0.5.1",
     "run-sequence": "^1.0.1"
   },
   "dependencies": {
