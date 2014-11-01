@@ -19,15 +19,18 @@ module.exports = {
         // assets folder within your app source folder
         assets: 'assets',
         
-        // webpack modules entry point folder within your app source folder
-        // NOTE: you can add many modules entry points folders by changing this settings to be an array
-        modules: 'modules',
+        // you can organize you features in sub-folders by changing this option to be an array.
+        features: 'features',
         
-        // javascript entry points folder within your app source folder
-        scripts: 'entry-points',
+        // by default you write your javascript entry points beside the HTML files
+        // but you can move them into a sub-folder if you prefer.
+        scripts: '.',
         
-        // css entry points folder within your app source folder
-        styles: 'entry-points'
+        // by default you write your CSS entry points beside the HTML files
+        // but you can move them into a sub-folder if you prefer.
+        //
+        // NOTE: this can be the same folder used for Javascript entry points!
+        styles: '.'
     },
     
     target: {

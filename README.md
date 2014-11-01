@@ -1,12 +1,12 @@
 PoliteJS Workspace - <small>Gulp Edition</small>
 =================================
 
-PoliteJS [_Workspace_][wks] is a [_GulpJS_][gulp] setup which combines a lot of existing 
+PoliteJS [_Workspace_][wks] is a [_GulpJS_][gulp] setup which combines some of the best 
 **Open Source** modules to provide you with a clever project organization and 
 code structure in order to **increase web development productivity**.
 
 > In order to run the follwing Quick Start scripts you need 
-> [NodeJS][node] and [NPM][npm] up and runnin on your computer.
+> [NodeJS][node] and [NPM][npm] up and running on your computer.
 > You also need [GulpJS][gulp] installed globally.
 
     // install Gulp (if you don't have it yet)
@@ -45,7 +45,7 @@ as soon you modify a source file.
 
 ### `gulp show`
 
-It build the application, it launch the development server and it also open your default
+It build the application, it launch the **development server** and it also open your default
 browser in order to display the app.
 
 ### `gulp start`
@@ -79,7 +79,7 @@ When you link static files from your HTML entry points you can use the shortcut
 
 You web application is build with some (optional) Javascript and LessCss entry points.
 
-You can place those entry points in `/app/core/`, the compiler will take care of them
+You can place those entry points in `/app/`, the compiler will take care of them
 and it will generate the relative bundle.
 
 > Each HTML entry point try to load the associated Js and Less entry point by name.  
@@ -91,53 +91,54 @@ and it will generate the relative bundle.
 In your Javascript entry points you can use `require('module-name')` to load
 _Application Modules_ from `/node_modules/` and `/app/modules/`.
 
-## Application Modules
+## Application Features
 
-You can split you application in modules which implement one single part of the app,
+You can organize a big WebApp in small pieces which implements one single part of the app,
 **one single responsibility**.
 
-Each module is just a sub-folder of `/app/modules/` which implements the standard
+Each feature is just a sub-folder of `/app/features/` which implements the standard
 _NodeJS_ modules rules.
+
+From your Javascript entry point you can `require('xxx')` to load `/app/features/xxx/index.js`.
 
 ### Big App Organization
 
-When dealing with big applications I like to divide my modules by argument.
+When dealing with big applications I like to divide my features by argument.
 
-I use **domain modules** which are responsible for data and business rules,
-**application modules** which are responsible of UI and user interaction,
-**Knockout components modules** which are just standalone pieces of UI and normally
-I also add an **utility modules** folder where I place modules which are just 
+I use **domain features** which are responsible for data and business rules,
+**application features** which are responsible of UI and user interaction,
+**Knockout components** which are just standalone pieces of UI and normally
+I also add an **utility features** folder where I place modules which are just 
 project's utilities but which are not so generic to be publisched.
 
-My `/app/modules/` folder structure is like that:
+My `/app/features/` folder structure is like that:
 
-    /app/modules
+    /app/features
       /application
-        /my-module-name
+        /my-features-name
           index.js
         ...
       /domain
-        /my-module-name
+        /my-features-name
         ...
       /components
-        /my-module-name
+        /my-features-name
         ...
       /utils
-        /my-module-name
+        /my-features-name
         ...
 
 To achieve this structure you need to modify `workspace.conf.js` adding a `sub-modules`
 key in which you list the sub-modules folder structure you need:
 
-    source: {...},
-    target: {...},
-    subModules: [
-      'application',
-      'domain',
-      'components',
-      'utils'
-    ],
-    ...
+    source: {
+      features: [
+        'application',
+        'domain',
+        'components',
+        'utils'
+      ]
+    },
 
 ## Unit Tests & TDD
 
