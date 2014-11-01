@@ -29,9 +29,7 @@
     }
   ],
   "devDependencies": {
-    "gulp": "^3.8.9",
-    "gulp-workspace": "0.0.x",
-    "run-sequence": "^1.0.1"
+    "gulp-workspace": "0.0.x"
   },
   "dependencies": {
     "jqb-ko-component": "0.0.0"
