@@ -64,6 +64,13 @@ If you want also to run tests in a `gulp tdd` way you can use the param `-t`:
 HTML entry points are just normal HTML files, you can create as many as you want 
 and you can even create a sub-folders structure.
 
+You can embed _Markdown_ regions within the HTML that are parsed to HTML at building time:
+
+    <!-- Markdown -->
+    this will be **converted to HTML** during the building!
+    <!-- /Markdown -->
+    
+
 ## Assets
 
 Place static files like images, fonts, js or css libraries (also LessCss) under
@@ -100,6 +107,12 @@ Each feature is just a sub-folder of `/app/features/` which implements the stand
 _NodeJS_ modules rules.
 
 From your Javascript entry point you can `require('xxx')` to load `/app/features/xxx/index.js`.
+
+You can host HTML files within a feature folder and require them usin the name with the extension:
+
+    require('./template.html');
+    
+The HTML file is loaded as a string template, it can also contain some _Markdown_ partial which is compiled to HTML during the require.
 
 ### Big App Organization
 
