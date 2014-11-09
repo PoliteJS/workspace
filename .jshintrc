@@ -1,0 +1,41 @@
+{
+	"camelcase": true,
+	"curly": true,
+	"immed": true,
+	"maxdepth": 10,
+	"maxlen": 160,
+	"maxparams": 10,
+	"maxstatements": 100,
+	"newcap": true,
+	"noarg": true,
+	"nonew": true,
+	"undef": true,
+	"validthis": true,
+
+	"boss": true,
+	"eqnull": true,
+	"evil": false,
+	"expr": true,
+	"smarttabs": true,
+	"sub": true,
+
+	"browser": true,
+	"devel": true,
+
+	"globals": {
+		"self": false,
+		"define": false,
+		"require": false,
+		"exports": false,
+		"module": false,
+		"describe": false,
+		"it": false,
+		"before": false,
+		"after": false,
+		"beforeEach": false,
+		"afterEach": false,
+		"expect": false,
+		"should": false,
+		"sinon": false
+	}
+}
