@@ -2,12 +2,15 @@
  * PoliteJS Workspace
  * ==================
  *
+ * gulp show
+ * vuild the project, start the server and show it up in the default browser
+ *
  * gulp build
  * compile a development version of the project, debugging tools as
  * sourcemaps are available
  *
- * gulp test
- * run all the project's unit tests
+ * gulp start
+ * compile, monitor and start debug server in background
  *
  * gulp dev
  * start a development session which keep the target folder up to date
@@ -17,12 +20,12 @@
  * install KarmaJS test suite 
  * you need to do this once before to start unit testing
  *
+ * gulp test
+ * run all the project's unit tests
+ *
  * gulp tdd
  * start a TDD session, all tests are executed as soon a source file change
  * or a test file is update with new tests.
- *
- * gulp start
- * compile, monitor and start debug server in background
  *
  */
 
@@ -42,7 +45,7 @@ var assetsPath = path.join(wks.getConfig('source.path'), wks.getConfig('source.a
 
 gulp.task('default', ['show'], function() {});
 
-gulp.task('build', function(done) {
+gulp.task('build', ['wks-jshint'], function(done) {
     sequence(
         'wkd-clean',
         'wkd-build-js',
@@ -52,7 +55,14 @@ gulp.task('build', function(done) {
     );
 });
 
-gulp.task('watch', function() {
+gulp.task('show', ['build'], function(done) {
+    sequence(
+        'wks-server-show',
+        done
+    );
+});
+
+gulp.task('watch', ['build'], function() {
     gulp.watch([
         appPath + '/*.html'
     ], ['wkd-build-html']);
@@ -70,25 +80,15 @@ gulp.task('watch', function() {
     ], ['wkd-build-css']);
 });
 
-gulp.task('dev', function(done) {
+gulp.task('dev', ['build'], function(done) {
     sequence(
-        'build',
         'watch',
         done
     );
 });
 
-gulp.task('show', function(done) {
+gulp.task('start', ['build'], function(done) {
     sequence(
-        'build',
-        'wks-server-show',
-        done
-    );
-});
-
-gulp.task('start', function(done) {
-    sequence(
-        'build',
         'wks-start',
         done
     );
@@ -105,14 +105,14 @@ gulp.task('init-tdd', function(done) {
 
 if (fs.existsSync(path.join(__dirname, 'node_modules/karma'))) {
     var karma = require('karma');
-    gulp.task('test', function() {
+    gulp.task('test', ['wks-jshint'], function() {
         karma.server.start({
             configFile: __dirname + '/karma.conf.js',
             singleRun: true,
             autoWatch: false
         });
     });
-    gulp.task('tdd', function (done) {
+    gulp.task('tdd', ['wks-jshint'], function (done) {
         karma.server.start({
             configFile: __dirname + '/karma.conf.js'
         }, done); 
@@ -121,9 +121,8 @@ if (fs.existsSync(path.join(__dirname, 'node_modules/karma'))) {
 
 // Partials Tasks (do not use those tasks alone)
 
-gulp.task('wkd-build-js', function(done) {
+gulp.task('wkd-build-js', ['wks-jshint'], function(done) {
     sequence(
-        'wks-jshint',
         'wkd-webpack',
         done
     );
