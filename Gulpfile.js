@@ -80,14 +80,14 @@ gulp.task('watch', ['build'], function() {
     ], ['wkd-build-css']);
 });
 
-gulp.task('dev', ['build'], function(done) {
+gulp.task('dev', ['wks-jshint'], function(done) {
     sequence(
         'watch',
         done
     );
 });
 
-gulp.task('start', ['build'], function(done) {
+gulp.task('start', ['wks-jshint'], function(done) {
     sequence(
         'wks-start',
         done
