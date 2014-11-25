@@ -198,6 +198,25 @@ run unit tests one single time.
 
 run unit tests every time a source file or a test file change.
 
+## Sourcemaps & Minification
+
+_Workspace_ produces sourcemaps by default and does not minify your code to serve the best processing performances.
+
+You can control those behaviours from `workspace.conf.js`:
+
+    target: {
+      dev: {
+        css: {
+          sourcemaps: true // false,
+          minify: true // false
+        },
+        js: {
+          sourcemaps: true // false,
+          minify: true // false
+        }
+      }
+    }
+
 
 [wks]: https://github.com/PoliteJS/workspace "Single Page Application Workspace"
 [npm]: npmjs.org
