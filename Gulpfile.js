@@ -45,6 +45,27 @@ var assetsPath = path.join(wks.getConfig('source.path'), wks.getConfig('source.a
 
 gulp.task('default', ['show'], function() {});
 
+gulp.task('show', ['build'], function(done) {
+    sequence(
+        'wks-server-show',
+        done
+    );
+});
+
+gulp.task('start', ['build'], function(done) {
+    sequence(
+        'wks-start',
+        done
+    );
+});
+
+gulp.task('dev', ['build'], function(done) {
+    sequence(
+        'watch',
+        done
+    );
+});
+
 gulp.task('build', ['wks-jshint'], function(done) {
     sequence(
         'wkd-clean',
@@ -55,14 +76,7 @@ gulp.task('build', ['wks-jshint'], function(done) {
     );
 });
 
-gulp.task('show', ['build'], function(done) {
-    sequence(
-        'wks-server-show',
-        done
-    );
-});
-
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', function() {
     gulp.watch([
         appPath + '/*.html'
     ], ['wkd-build-html']);
@@ -78,20 +92,6 @@ gulp.task('watch', ['build'], function() {
         appPath + '/**/*.less',
         appPath + '/**/*.css'
     ], ['wkd-build-css']);
-});
-
-gulp.task('dev', ['wks-jshint'], function(done) {
-    sequence(
-        'watch',
-        done
-    );
-});
-
-gulp.task('start', ['wks-jshint'], function(done) {
-    sequence(
-        'wks-start',
-        done
-    );
 });
 
 // Tests tasks are available only "on demand"
