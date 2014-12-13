@@ -217,6 +217,33 @@ You can control those behaviours from `workspace.conf.js`:
       }
     }
 
+## HTML Import
+
+Your HTML entry points supports a strategy to include some ohter HTML resources from
+around the application repository:
+
+	<link rel="import-html" href="./path/to/file.html" params="foo:1, faa:2" />
+	
+The target HTML file will be imported into the original page at build time.
+
+The `params` attribute is converted into a plain Javascript object and it is given to the
+JSSP interpreter. It will be available as `this.params.xxx`.
+
+## JSSP (Javascript Server Pages)
+
+All the HTML entry points and the imported HTML snippets are capable to run Javascript at building time (which is executed by NodeJS, not the browser!).
+
+	// app/index.html
+	<%
+	var title = 'My title';
+	%>
+	<head>
+		<title><%= title %></title>
+	</head>
+	
+Each file is executed into a closure so you can define local variables.
+
+
 
 [wks]: https://github.com/PoliteJS/workspace "Single Page Application Workspace"
 [npm]: npmjs.org
