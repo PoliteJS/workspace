@@ -7,13 +7,12 @@ code structure in order to **increase web development productivity**.
 
 > In order to run the follwing Quick Start scripts you need 
 > [NodeJS][node] and [NPM][npm] up and running on your computer.
-> You also need [GulpJS][gulp] installed globally.
 
-    // install Gulp (if you don't have it yet)
-    npm install -g gulp
+    // copy & paste in your terminal
+    // (run this in your project-to-be empty folder)
     
-    // quick project startup
-    npm install && gulp
+    bash <(curl -s https://raw.githubusercontent.com/PoliteJS/workspace/curl-setup/setup.sh)
+    
     
 ## Folder Structure
 
